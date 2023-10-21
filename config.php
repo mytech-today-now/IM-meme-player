@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 try {
     // Configuration values
     $config = [
-        "MEDIA_DIRECTORY" => "./presenta/memes/"
+        "MEDIA_DIRECTORY" => "./"
     ];
 
     // Return the JSON response
