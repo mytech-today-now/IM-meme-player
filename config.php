@@ -1,6 +1,6 @@
 <?php
 
-// CORS headers to allow any origin to access (for simplicity, but in a real-world scenario, you'd want to be more restrictive)
+// CORS headers to allow any origin to access
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
@@ -11,12 +11,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-// Configuration values
-$config = [
-    "MEDIA_DIRECTORY" => "./presenta/memes/"
-];
+try {
+    // Configuration values
+    $config = [
+        "MEDIA_DIRECTORY" => "./presenta/memes/"
+    ];
 
-// Return the JSON response
-echo json_encode($config);
+    // Return the JSON response
+    echo json_encode($config);
+} catch (Exception $e) {
+    error_log("Error in config.php: " . $e->getMessage() . " on line " . $e->getLine());
+    echo json_encode(["error" => "An error occurred while processing the request."]);
+}
 
 ?>
