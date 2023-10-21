@@ -15,12 +15,19 @@ document.addEventListener('DOMContentLoaded', function() {
         return array;
     }
 
+    function displayError(mediaBoxElement, errorMessage) {
+        mediaBoxElement.innerHTML = `<div class="error-message">${errorMessage}</div>`;
+    }
+
     function createImageElement(src) {
         const img = document.createElement('img');
         img.src = src;
         img.style.maxWidth = '100%';
         img.style.maxHeight = '100%';
-        img.onerror = () => console.error(`Failed to load image: ${src}`);
+        img.onerror = () => {
+            const mediaBoxElement = document.getElementById('mediaBox');
+            displayError(mediaBoxElement, `Failed to load image: ${src}`);
+        };
         return img;
     }
 
@@ -30,13 +37,15 @@ document.addEventListener('DOMContentLoaded', function() {
         video.muted = true;
         video.controls = true;
         video.src = src;
-        video.onerror = () => console.error(`Failed to load video: ${src}`);
+        video.onerror = () => {
+            const mediaBoxElement = document.getElementById('mediaBox');
+            displayError(mediaBoxElement, `Failed to load video: ${src}`);
+        };
         video.addEventListener('ended', displayNextMedia);
         return video;
     }
 
     function displayMediaFile(mediaBoxElement, file) {
-        // Remove existing media
         while (mediaBoxElement.firstChild) {
             mediaBoxElement.removeChild(mediaBoxElement.firstChild);
         }
@@ -59,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 mediaElement = createVideoElement(file);
                 break;
             default:
-                console.error(`Unsupported file type: ${fileType}`);
+                displayError(mediaBoxElement, `Unsupported file type: ${fileType}`);
                 return;
         }
 
@@ -69,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayNextMedia() {
         currentIndex++;
         if (currentIndex >= shuffledFiles.length) {
-            currentIndex = 0; // Loop back to the start
+            currentIndex = 0;
         }
         const mediaBoxElement = document.getElementById('mediaBox');
         displayMediaFile(mediaBoxElement, MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
@@ -78,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayPreviousMedia() {
         currentIndex--;
         if (currentIndex < 0) {
-            currentIndex = shuffledFiles.length - 1; // Loop back to the end
+            currentIndex = shuffledFiles.length - 1;
         }
         const mediaBoxElement = document.getElementById('mediaBox');
         displayMediaFile(mediaBoxElement, MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
@@ -86,12 +95,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleArrowKeyPress(event) {
         if (event.key === 'ArrowRight') {
-            console.log('Forward arrow pressed.');
-            alert('Forward arrow pressed.');
             displayNextMedia();
         } else if (event.key === 'ArrowLeft') {
-            console.log('Back arrow pressed.');
-            alert('Back arrow pressed.');
             displayPreviousMedia();
         }
     }
@@ -113,7 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayMediaFile(mediaBoxElement, MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
             })
             .catch(error => {
-                console.error(`Error: ${error.message}`);
+                const mediaBoxElement = document.getElementById('mediaBox');
+                displayError(mediaBoxElement, error.message);
             });
     }
 
@@ -130,7 +136,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 fetchAndDisplayFiles();
             })
             .catch(error => {
-                console.error(`Configuration Error: ${error.message}`);
+                const mediaBoxElement = document.getElementById('mediaBox');
+                displayError(mediaBoxElement, `Configuration Error: ${error.message}`);
             });
     }
 
