@@ -1,7 +1,7 @@
 <?php
 
 // CORS headers
-header("Access-Control-Allow-Origin: https://your-allowed-origin.com"); // Replace with your actual allowed origin
+header("Access-Control-Allow-Origin: https://insidiousmeme.com"); // Replace with your actual allowed origin
 header("Access-Control-Allow-Methods: GET"); // Only allowing GET method
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header('Content-Type: application/json');
