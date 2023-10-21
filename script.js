@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Constants
-    const API_ENDPOINT = 'https://insidiousmeme.com/filelist.php';
-    const CONFIG_ENDPOINT = 'https://insidiousmeme.com/config.php';
+    const API_ENDPOINT = 'https://insidiousmeme.com//presenta/memes/filelist.php';
+    const CONFIG_ENDPOINT = 'https://insidiousmeme.com//presenta/memes/config.php';
     const IMAGE_DISPLAY_TIME = 5000; // 5 seconds
 
     let MEDIA_DIRECTORY;
