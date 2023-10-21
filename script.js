@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Constants
     const API_ENDPOINT = 'https://insidiousmeme.com/filelist.php';
+    const CONFIG_ENDPOINT = 'https://insidiousmeme.com/config.php';
     const IMAGE_DISPLAY_TIME = 5000; // 5 seconds
-    const CUSTOM_TOKEN_VALUE = 'MY_CUSTOM_VALUE';
-    const MEDIA_DIRECTORY = 'https://insidiousmeme.com/presenta/memes/';
+
+    let MEDIA_DIRECTORY;
 
     // Fisher-Yates shuffle algorithm
+    // This algorithm is used to shuffle the array in a random order
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -14,91 +16,90 @@ document.addEventListener('DOMContentLoaded', function() {
         return array;
     }
 
-    // Handle media loading errors
-    function handleMediaError(mediaElement, type) {
-        console.error(`Failed to load ${type}:`, mediaElement.src);
-        mediaElement.remove();
+    function createImageElement(src) {
+        const img = document.createElement('img');
+        img.src = src;
+        img.style.maxWidth = '100%';
+        img.style.maxHeight = '100%';
+        img.onerror = () => console.error(`Failed to load image: ${src}`);
+        return img;
     }
 
-    let currentTimeout;
-
-    // Function to handle video playback
-    function handleVideoPlayback(videoElement, files, index) {
-        let videoTimeout = setTimeout(() => {
-            displayFilesSequentially(files, (index + 1) % files.length);
-        }, IMAGE_DISPLAY_TIME);
-
-        videoElement.addEventListener('play', () => {
-            clearTimeout(videoTimeout);
-        });
+    function createVideoElement(src) {
+        const video = document.createElement('video');
+        video.autoplay = true;
+        video.muted = true;
+        video.controls = true;
+        video.src = src;
+        video.onerror = () => console.error(`Failed to load video: ${src}`);
+        video.addEventListener('ended', fetchAndDisplayFiles); // Move to next media file when video ends
+        return video;
     }
 
-    // Display media files sequentially
-    function displayFilesSequentially(files, index) {
-        const mediaBoxElement = document.getElementById('mediaBox');
-        if (!mediaBoxElement) {
-            console.error("Required DOM element not found.");
-            return;
-        }
+    function displayMediaFile(mediaBoxElement, file) {
+        const fileType = file.split('.').pop().toLowerCase();
+        let mediaElement;
 
-        while (mediaBoxElement.firstChild) {
-            mediaBoxElement.firstChild.remove();
-        }
-
-        const file = MEDIA_DIRECTORY + files[index];
-        console.log(file);
-        const fileExtension = file.split('.').pop().toLowerCase();
-
-        if (['jpg', 'jpeg', 'png', 'gif', 'jfif', 'svg'].includes(fileExtension)) {
-            const img = document.createElement('img');
-            img.src = file;
-            img.style.maxWidth = '100%';
-            img.style.maxHeight = '100%';
-            img.onerror = () => handleMediaError(img, 'image');
-            mediaBoxElement.appendChild(img);
-
-            currentTimeout = setTimeout(() => {
-                displayFilesSequentially(files, (index + 1) % files.length);
-            }, IMAGE_DISPLAY_TIME);
-        } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
-            const videoElement = document.createElement('video');
-            videoElement.autoplay = true;
-            videoElement.muted = true;
-            videoElement.controls = true;
-            videoElement.src = file;
-            videoElement.onerror = () => handleMediaError(videoElement, 'video');
-            mediaBoxElement.appendChild(videoElement);
-            videoElement.play();
-
-            handleVideoPlayback(videoElement, files, index);
-        }
-    }
-
-    // Fetch the list of files
-    fetch(API_ENDPOINT, { method: 'GET' })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(text => {
-            try {
-                return JSON.parse(text);
-            } catch (err) {
-                throw new Error(`Invalid JSON response: ${text}`);
-            }
-        })
-        .then(jsonData => {
-            if (jsonData.error) {
-                console.error(jsonData.error);
+        switch (fileType) {
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+            case 'gif':
+            case 'jfif':
+            case 'svg':
+                mediaElement = createImageElement(file);
+                break;
+            case 'mp4':
+            case 'webm':
+            case 'ogg':
+                mediaElement = createVideoElement(file);
+                break;
+            default:
+                console.error(`Unsupported file type: ${fileType}`);
                 return;
-            }
+        }
 
-            const files = shuffleArray(Object.values(jsonData));
-            displayFilesSequentially(files, 0);
-        })
-        .catch(error => {
-            console.error("Network error:", error);
-        });
+        mediaBoxElement.appendChild(mediaElement);
+    }
+
+    function fetchAndDisplayFiles() {
+        fetch(API_ENDPOINT, { method: 'GET' })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch from API');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!Array.isArray(data)) {
+                    throw new Error('Unexpected API response format');
+                }
+                const shuffledFiles = shuffleArray(data);
+                const mediaBoxElement = document.getElementById('mediaBox');
+                displayMediaFile(mediaBoxElement, MEDIA_DIRECTORY + shuffledFiles[0]);
+            })
+            .catch(error => {
+                console.error(`Error: ${error.message}`);
+            });
+    }
+
+    // Fetch configuration (e.g., MEDIA_DIRECTORY)
+    function fetchConfig() {
+        fetch(CONFIG_ENDPOINT, { method: 'GET' })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch configuration');
+                }
+                return response.json();
+            })
+            .then(config => {
+                MEDIA_DIRECTORY = config.MEDIA_DIRECTORY;
+                fetchAndDisplayFiles();
+            })
+            .catch(error => {
+                console.error(`Configuration Error: ${error.message}`);
+            });
+    }
+
+    fetchConfig();
 });
