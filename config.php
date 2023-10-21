@@ -21,7 +21,9 @@ try {
     echo json_encode($config);
 } catch (Exception $e) {
     error_log("Error in config.php: " . $e->getMessage() . " on line " . $e->getLine());
-    echo json_encode(["error" => "An error occurred while processing the request."]);
+    echo json_encode([
+        "error" => "<div style='white-space: pre-line; word-wrap: break-word; overflow-wrap: break-word;'>An error occurred while processing the request.</div>"
+    ]);
 }
 
 ?>

@@ -34,7 +34,9 @@ try {
     echo json_encode(["data" => $filteredFiles]);
 } catch (Exception $e) {
     error_log("Error in filelist.php: " . $e->getMessage() . " on line " . $e->getLine());
-    echo json_encode(["error" => "An error occurred while processing the request."]);
+    echo json_encode([
+        "error" => "<div style='white-space: pre-line; word-wrap: break-word; overflow-wrap: break-word;'>An error occurred while processing the request.</div>"
+    ]);
 }
 
 ?>
