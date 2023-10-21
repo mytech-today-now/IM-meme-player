@@ -1,13 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Constants
     const API_ENDPOINT = 'https://insidiousmeme.com//presenta/memes/filelist.php';
     const CONFIG_ENDPOINT = 'https://insidiousmeme.com//presenta/memes/config.php';
-    const IMAGE_DISPLAY_TIME = 5000; // 5 seconds
+    const IMAGE_DISPLAY_TIME = 5000;
 
     let MEDIA_DIRECTORY;
+    let shuffledFiles = [];
+    let currentIndex = 0;
 
-    // Fisher-Yates shuffle algorithm
-    // This algorithm is used to shuffle the array in a random order
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -32,11 +31,16 @@ document.addEventListener('DOMContentLoaded', function() {
         video.controls = true;
         video.src = src;
         video.onerror = () => console.error(`Failed to load video: ${src}`);
-        video.addEventListener('ended', fetchAndDisplayFiles); // Move to next media file when video ends
+        video.addEventListener('ended', displayNextMedia);
         return video;
     }
 
     function displayMediaFile(mediaBoxElement, file) {
+        // Remove existing media
+        while (mediaBoxElement.firstChild) {
+            mediaBoxElement.removeChild(mediaBoxElement.firstChild);
+        }
+
         const fileType = file.split('.').pop().toLowerCase();
         let mediaElement;
 
@@ -62,6 +66,36 @@ document.addEventListener('DOMContentLoaded', function() {
         mediaBoxElement.appendChild(mediaElement);
     }
 
+    function displayNextMedia() {
+        currentIndex++;
+        if (currentIndex >= shuffledFiles.length) {
+            currentIndex = 0; // Loop back to the start
+        }
+        const mediaBoxElement = document.getElementById('mediaBox');
+        displayMediaFile(mediaBoxElement, MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
+    }
+
+    function displayPreviousMedia() {
+        currentIndex--;
+        if (currentIndex < 0) {
+            currentIndex = shuffledFiles.length - 1; // Loop back to the end
+        }
+        const mediaBoxElement = document.getElementById('mediaBox');
+        displayMediaFile(mediaBoxElement, MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
+    }
+
+    function handleArrowKeyPress(event) {
+        if (event.key === 'ArrowRight') {
+            console.log('Forward arrow pressed.');
+            alert('Forward arrow pressed.');
+            displayNextMedia();
+        } else if (event.key === 'ArrowLeft') {
+            console.log('Back arrow pressed.');
+            alert('Back arrow pressed.');
+            displayPreviousMedia();
+        }
+    }
+
     function fetchAndDisplayFiles() {
         fetch(API_ENDPOINT, { method: 'GET' })
             .then(response => {
@@ -74,16 +108,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!Array.isArray(data)) {
                     throw new Error('Unexpected API response format');
                 }
-                const shuffledFiles = shuffleArray(data);
+                shuffledFiles = shuffleArray(data);
                 const mediaBoxElement = document.getElementById('mediaBox');
-                displayMediaFile(mediaBoxElement, MEDIA_DIRECTORY + shuffledFiles[0]);
+                displayMediaFile(mediaBoxElement, MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
             })
             .catch(error => {
                 console.error(`Error: ${error.message}`);
             });
     }
 
-    // Fetch configuration (e.g., MEDIA_DIRECTORY)
     function fetchConfig() {
         fetch(CONFIG_ENDPOINT, { method: 'GET' })
             .then(response => {
@@ -101,5 +134,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+    document.addEventListener('keydown', handleArrowKeyPress);
     fetchConfig();
 });
