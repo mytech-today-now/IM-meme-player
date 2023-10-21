@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 // Configuration values
 $config = [
-    "MEDIA_DIRECTORY" => "https://insidiousmeme.com/presenta/memes/"
+    "MEDIA_DIRECTORY" => "./presenta/memes/"
 ];
 
 // Return the JSON response
