@@ -20,7 +20,7 @@ header('Content-Type: application/json');
 // Configuration
 // NOTE: Update this path to the correct file system path on your server
 $config = [
-    "dirPath" => '/path/to/your/memes/directory/on/server/',
+    "dirPath" => '/home4/fightth5/public_html/insidiousmeme/presenta/memes/',
 ];
 
 try {
