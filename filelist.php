@@ -19,7 +19,7 @@ try {
 
     // Configuration
     $config = [
-        "dirPath" => "https://insidiousmeme.com/presenta/memes/",
+        "dirPath" => 'https://insidiousmeme.com/presenta/memes/',
     ];
     error_log("filelist.php: Configured directory path (Line 20)");
 
