@@ -1,7 +1,18 @@
 <?php
 
-// Centralized CORS headers
-header("Access-Control-Allow-Origin: https://insidiousmeme.com");
+// Allowed origins
+$allowed_origins = ["https://insidiousmeme.com", "https://www.insidiousmeme.com"];
+
+// Check the Origin header of the incoming request
+$request_origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+if (in_array($request_origin, $allowed_origins, true)) {
+    header("Access-Control-Allow-Origin: $request_origin");
+} else {
+    // If the origin is not allowed, exit early
+    exit('CORS policy violation.');
+}
+
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header('Content-Type: application/json');
