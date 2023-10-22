@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 try {
     // Configuration
     $config = [
-        "dirPath" => "./",
+        "dirPath" => "https://insidiousmeme.com/presenta/memes/",
     ];
 
     // Check if the directory exists
