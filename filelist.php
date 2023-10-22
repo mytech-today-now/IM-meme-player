@@ -1,7 +1,18 @@
 <?php
 
-// CORS headers
-header("Access-Control-Allow-Origin: https://insidiousmeme.com");
+// Allowed origins
+$allowed_origins = ["https://insidiousmeme.com", "https://www.insidiousmeme.com"];
+
+// Check the Origin header of the incoming request
+$request_origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+if (in_array($request_origin, $allowed_origins, true)) {
+    header("Access-Control-Allow-Origin: $request_origin");
+} else {
+    // If the origin is not allowed, exit early
+    exit('CORS policy violation.');
+}
+
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header('Content-Type: application/json');
@@ -18,7 +29,7 @@ try {
     }
 
     // Use glob pattern to get only the required files (assuming only images and videos are required)
-    $files = glob($config["dirPath"] . '*.{jpg,jpeg,png,gif,mp4,webm,ogg}', GLOB_BRACE);
+    $files = glob($config["dirPath"] . '*.{jpg,jpeg,jfif,png,gif,mp4,webm,ogg}', GLOB_BRACE);
 
     // Return the JSON response
     echo json_encode(["data" => $files]);
