@@ -18,8 +18,9 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 header('Content-Type: application/json');
 
 // Configuration
+// NOTE: Update this path to the correct file system path on your server
 $config = [
-    "dirPath" => 'https://insidiousmeme.com/presenta/memes/',
+    "dirPath" => '/path/to/your/memes/directory/on/server/',
 ];
 
 try {
