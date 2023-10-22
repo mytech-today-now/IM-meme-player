@@ -1,7 +1,7 @@
 <?php
 
 // Centralized CORS headers
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://insidiousmeme.com");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header('Content-Type: application/json');
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 try {
     // Configuration values
     $config = [
-        "MEDIA_DIRECTORY" => "./"
+        "MEDIA_DIRECTORY" => "./presenta/memes/"
     ];
 
     // Return the JSON response
