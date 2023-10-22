@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(API_ENDPOINT, { method: 'GET' })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Failed to fetch from API');
+                    throw new Error(`Failed to fetch from API. Status: ${response.status} ${response.statusText}`);
                 }
                 return response.json();
             })
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 const mediaBoxElement = document.getElementById('mediaBox');
-                displayError(mediaBoxElement, error.message);
+                displayError(mediaBoxElement, `Error fetching files: ${error.message}`);
             });
     }
 
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(CONFIG_ENDPOINT, { method: 'GET' })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Failed to fetch configuration');
+                    throw new Error(`Failed to fetch configuration. Status: ${response.status} ${response.statusText}`);
                 }
                 return response.json();
             })
