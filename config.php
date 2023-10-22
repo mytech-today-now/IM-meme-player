@@ -1,6 +1,6 @@
 <?php
 
-// CORS headers to allow any origin to access
+// Centralized CORS headers
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
@@ -21,8 +21,10 @@ try {
     echo json_encode($config);
 } catch (Exception $e) {
     error_log("Error in config.php: " . $e->getMessage() . " on line " . $e->getLine());
+    // Structured error response
     echo json_encode([
-        "error" => "<div style='white-space: pre-line; word-wrap: break-word; overflow-wrap: break-word;'>An error occurred while processing the request.</div>"
+        "status" => "error",
+        "message" => "An error occurred while processing the request."
     ]);
 }
 

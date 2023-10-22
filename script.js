@@ -1,12 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Constants
     const API_ENDPOINT = 'https://insidiousmeme.com/filelist.php';
     const CONFIG_ENDPOINT = 'https://www.insidiousmeme.com/config.php';
     const IMAGE_DISPLAY_TIME = 5000;
 
+    // Variables
     let MEDIA_DIRECTORY;
     let shuffledFiles = [];
     let currentIndex = 0;
 
+    // Utility Functions
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -19,30 +22,37 @@ document.addEventListener('DOMContentLoaded', function() {
         mediaBoxElement.innerHTML = `<div class="error-message">${errorMessage}</div>`;
     }
 
-    function createImageElement(src) {
-        const img = document.createElement('img');
-        img.src = src;
-        img.style.maxWidth = '100%';
-        img.style.maxHeight = '100%';
-        img.onerror = () => {
-            const mediaBoxElement = document.getElementById('mediaBox');
-            displayError(mediaBoxElement, `Failed to load image: ${src}`);
-        };
-        return img;
-    }
-
-    function createVideoElement(src) {
-        const video = document.createElement('video');
-        video.autoplay = true;
-        video.muted = true;
-        video.controls = true;
-        video.src = src;
-        video.onerror = () => {
-            const mediaBoxElement = document.getElementById('mediaBox');
-            displayError(mediaBoxElement, `Failed to load video: ${src}`);
-        };
-        video.addEventListener('ended', displayNextMedia);
-        return video;
+    function createMediaElement(fileType, file) {
+        let mediaElement;
+        switch (fileType) {
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+            case 'gif':
+            case 'jfif':
+            case 'svg':
+                mediaElement = document.createElement('img');
+                mediaElement.src = file;
+                mediaElement.style.maxWidth = '100%';
+                mediaElement.style.maxHeight = '100%';
+                mediaElement.onerror = () => displayError(document.getElementById('mediaBox'), `Failed to load image: ${file}`);
+                break;
+            case 'mp4':
+            case 'webm':
+            case 'ogg':
+                mediaElement = document.createElement('video');
+                mediaElement.autoplay = true;
+                mediaElement.muted = true;
+                mediaElement.controls = true;
+                mediaElement.src = file;
+                mediaElement.onerror = () => displayError(document.getElementById('mediaBox'), `Failed to load video: ${file}`);
+                mediaElement.addEventListener('ended', displayNextMedia);
+                break;
+            default:
+                displayError(document.getElementById('mediaBox'), `Unsupported file type: ${fileType}`);
+                return null;
+        }
+        return mediaElement;
     }
 
     function displayMediaFile(mediaBoxElement, file) {
@@ -51,28 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const fileType = file.split('.').pop().toLowerCase();
-        let mediaElement;
-
-        switch (fileType) {
-            case 'jpg':
-            case 'jpeg':
-            case 'png':
-            case 'gif':
-            case 'jfif':
-            case 'svg':
-                mediaElement = createImageElement(file);
-                break;
-            case 'mp4':
-            case 'webm':
-            case 'ogg':
-                mediaElement = createVideoElement(file);
-                break;
-            default:
-                displayError(mediaBoxElement, `Unsupported file type: ${fileType}`);
-                return;
+        const mediaElement = createMediaElement(fileType, file);
+        if (mediaElement) {
+            mediaBoxElement.appendChild(mediaElement);
         }
-
-        mediaBoxElement.appendChild(mediaElement);
     }
 
     function displayNextMedia() {
@@ -80,8 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (currentIndex >= shuffledFiles.length) {
             currentIndex = 0;
         }
-        const mediaBoxElement = document.getElementById('mediaBox');
-        displayMediaFile(mediaBoxElement, MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
+        displayMediaFile(document.getElementById('mediaBox'), MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
     }
 
     function displayPreviousMedia() {
@@ -89,8 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (currentIndex < 0) {
             currentIndex = shuffledFiles.length - 1;
         }
-        const mediaBoxElement = document.getElementById('mediaBox');
-        displayMediaFile(mediaBoxElement, MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
+        displayMediaFile(document.getElementById('mediaBox'), MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
     }
 
     function handleArrowKeyPress(event) {
@@ -114,12 +104,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     throw new Error('Unexpected API response format');
                 }
                 shuffledFiles = shuffleArray(data);
-                const mediaBoxElement = document.getElementById('mediaBox');
-                displayMediaFile(mediaBoxElement, MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
+                displayMediaFile(document.getElementById('mediaBox'), MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
             })
             .catch(error => {
-                const mediaBoxElement = document.getElementById('mediaBox');
-                displayError(mediaBoxElement, `Error fetching files: ${error.message}`);
+                displayError(document.getElementById('mediaBox'), `Error fetching files: ${error.message}`);
             });
     }
 
@@ -136,11 +124,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 fetchAndDisplayFiles();
             })
             .catch(error => {
-                const mediaBoxElement = document.getElementById('mediaBox');
-                displayError(mediaBoxElement, `Configuration Error: ${error.message}`);
+                displayError(document.getElementById('mediaBox'), `Configuration Error: ${error.message}`);
             });
     }
 
+    // Event Listeners
     document.addEventListener('keydown', handleArrowKeyPress);
     fetchConfig();
 });
