@@ -29,6 +29,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function fileExists(url) {
+        return fetch(url, { method: 'HEAD' })
+            .then(response => response.ok)
+            .catch(() => false);
+    }
+
     // Navigate through files
     function navigateFiles(step) {
         currentIndex = (currentIndex + step + files.length) % files.length;
@@ -39,8 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleMediaError(mediaElement, type, files, index) {
         console.error(`Failed to load ${type}:`, mediaElement.src);
         mediaElement.remove();
-        // Skip to the next file
-        navigateFiles(1, files);
+        navigateFiles(1, files); // Skip to the next file
     }
 
     // Add event listeners for navigation buttons
@@ -50,14 +55,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     // Display media files sequentially
-    function displayFilesSequentially(files, index) {
+    async function displayFilesSequentially(files, index) {
         currentIndex = index;
-
-        // Check if the file exists (pseudo-code, implement according to your environment)
-        if (!fileExists(file)) {
-            navigateFiles(1, files);
-            return;
-        }
 
         const mediaBoxElement = document.getElementById('mediaBox');
         if (!mediaBoxElement) {
@@ -71,6 +70,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const file = MEDIA_DIRECTORY + files[index];
         const fileExtension = file.split('.').pop().toLowerCase();
+
+        const exists = await fileExists(file);
+        if (!exists) {
+            navigateFiles(1, files);
+            return;
+        }
 
         if (['jpg', 'jpeg', 'png', 'gif', 'jfif', 'svg'].includes(fileExtension)) {
             const img = document.createElement('img');
