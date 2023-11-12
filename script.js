@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentIndex = 0; // Current index of the displayed file
     let files = []; // Array to store file names
     let currentTimeout; // Current timeout for image display
+    const file = MEDIA_DIRECTORY + files[index]; // Current file 
+    const fileExtension = file.split('.').pop().toLowerCase();
 
     // Fisher-Yates shuffle algorithm
     function shuffleArray(array) {
@@ -31,17 +33,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Navigate through files
     function navigateFiles(step) {
-        const newIndex = (currentIndex + step + files.length) % files.length;
-        displayFilesSequentially(files, newIndex);
+        currentIndex = (currentIndex + step + files.length) % files.length;
+        displayFilesSequentially(files, currentIndex);
     }
 
     // Handle media loading errors
     function handleMediaError(mediaElement, type, files, index) {
         console.error(`Failed to load ${type}:`, mediaElement.src);
         mediaElement.remove();
-
-        // Automatically navigate to the next file
-        displayFilesSequentially(files, (index + 1) % files.length);
+        // Skip to the next file
+        navigateFiles(1, files);
     }
 
     // Add event listeners for navigation buttons
@@ -51,6 +52,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Display media files sequentially
     function displayFilesSequentially(files, index) {
         currentIndex = index;
+
+        // Check if the file exists (pseudo-code, implement according to your environment)
+        if (!fileExists(file)) {
+            navigateFiles(1, files);
+            return;
+        }
 
         const mediaBoxElement = document.getElementById('mediaBox');
         if (!mediaBoxElement) {
