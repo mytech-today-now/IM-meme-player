@@ -46,8 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('prevButton').addEventListener('click', () => navigateFiles(-1));
     document.getElementById('nextButton').addEventListener('click', () => navigateFiles(1));
 
-    
-
     // Display media files sequentially
     async function displayFilesSequentially(files, index) {
         currentIndex = index;
@@ -71,12 +69,16 @@ document.addEventListener('DOMContentLoaded', function() {
             img.style.maxWidth = '100%';
             img.style.maxHeight = '100%';
             img.onerror = () => handleMediaError(img, 'image', files, index);
-            mediaBoxElement.appendChild(img);
 
-            clearTimeout(currentTimeout);
-            currentTimeout = setTimeout(() => {
-                displayFilesSequentially(files, (index + 1) % files.length);
-            }, IMAGE_DISPLAY_TIME);
+            // Add onload event listener
+            img.onload = () => {
+                clearTimeout(currentTimeout);
+                currentTimeout = setTimeout(() => {
+                    displayFilesSequentially(files, (index + 1) % files.length);
+                }, IMAGE_DISPLAY_TIME);
+            };
+
+            mediaBoxElement.appendChild(img);
         } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
             const videoElement = document.createElement('video');
             videoElement.autoplay = true;
