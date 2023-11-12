@@ -1,0 +1,59 @@
+
+/* Styling for the previous arrow */
+#prevButton {
+    z-index: 1000; /* Adjusted z-index */
+    cursor: pointer;
+    font-size: 11em; /* Adjusted font size for visibility */
+    font-family: Arial, sans-serif;
+    color: navy; /* Adjusted color for visibility */
+    background-color: #fff;
+    padding: 10px;
+}
+
+/* Styling for the next arrow */
+#nextButton {
+    z-index: 1000; /* Adjusted z-index */
+    cursor: pointer;
+    font-size: 11em; /* Adjusted font size for visibility */
+    font-family: Arial, sans-serif;
+    color: navy; /* Adjusted color for visibility */
+    background-color: #fff;
+    padding: 10px;
+}
+
+#nextButton onClick {
+	background-color: yellow;
+}
+
+#prevButton onClick {
+	background-color: yellow;
+}
+
+#nextButton hover {
+	font-size: 11.5em;
+}
+
+#prevButton hover {
+	font-size: 11.5em;
+}
+
+/* General styling for the container */
+#mediaBoxElement {
+    width: 100%;
+    height: 100%;
+    top: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 85%;
+    width: 85%;
+}
+#mediaBox {
+    width: 100%; /* Adjusted width */
+    height: 100%;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center; /* Center the frame vertically */
+    justify-content: center; /* Center the frame horizontally */
+}
