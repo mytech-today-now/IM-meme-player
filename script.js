@@ -49,35 +49,37 @@ document.addEventListener('DOMContentLoaded', function() {
     // Display media files sequentially
     async function displayFilesSequentially(files, index) {
         currentIndex = index;
-
+    
         const mediaBoxElement = document.getElementById('mediaBox');
         if (!mediaBoxElement) {
             console.error("Required DOM element not found.");
             return;
         }
-
+    
+        // Clear existing media
         while (mediaBoxElement.firstChild) {
             mediaBoxElement.firstChild.remove();
         }
-
+    
         const file = MEDIA_DIRECTORY + files[index];
         const fileExtension = file.split('.').pop().toLowerCase();
-
+    
         if (['jpg', 'jpeg', 'png', 'gif', 'jfif', 'svg'].includes(fileExtension)) {
             const img = document.createElement('img');
             img.src = file;
             img.style.maxWidth = '100%';
-            img.style.maxHeight = '100%';
+            img.style.maxHeight = '85vh'; // Set max height to 85% of viewport height
             img.onerror = () => handleMediaError(img, 'image', files, index);
-
+    
             // Add onload event listener
             img.onload = () => {
+                adjustMediaSize(img);
                 clearTimeout(currentTimeout);
                 currentTimeout = setTimeout(() => {
                     displayFilesSequentially(files, (index + 1) % files.length);
                 }, IMAGE_DISPLAY_TIME);
             };
-
+    
             mediaBoxElement.appendChild(img);
         } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
             const videoElement = document.createElement('video');
@@ -85,12 +87,30 @@ document.addEventListener('DOMContentLoaded', function() {
             videoElement.muted = true;
             videoElement.controls = true;
             videoElement.src = file;
+            videoElement.style.maxHeight = '85vh'; // Set max height for video
             videoElement.onerror = () => handleMediaError(videoElement, 'video', files, index);
             mediaBoxElement.appendChild(videoElement);
-
+    
             handleVideoPlayback(videoElement, files, index);
         }
     }
+    
+    // Function to adjust media size based on window height
+    function adjustMediaSize(mediaElement) {
+        const windowHeight = window.innerHeight;
+        const maxMediaHeight = windowHeight * 0.85; // 85% of window height
+        if (mediaElement.offsetHeight > maxMediaHeight) {
+            mediaElement.style.height = `${maxMediaHeight}px`;
+        }
+    }
+    
+    // Add resize event listener to adjust media size on window resize
+    window.addEventListener('resize', () => {
+        const mediaElement = document.querySelector('#mediaBox img, #mediaBox video');
+        if (mediaElement) {
+            adjustMediaSize(mediaElement);
+        }
+    });
 
     // Fetch the list of files
     fetch(API_ENDPOINT, { method: 'GET' })
