@@ -1,15 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Constants
     const API_ENDPOINT = 'https://insidiousmeme.com/filelist.php';
-    const CONFIG_ENDPOINT = 'https://insidiousmeme.com/config.php';
-    const IMAGE_DISPLAY_TIME = 5000;
+    const IMAGE_DISPLAY_TIME = 5000; // 5 seconds
+    const CUSTOM_TOKEN_VALUE = 'MY_CUSTOM_VALUE';
+    const MEDIA_DIRECTORY = 'https://insidiousmeme.com/presenta/memes/';
 
-    // Variables
-    let MEDIA_DIRECTORY;
-    let shuffledFiles = [];
-    let currentIndex = 0;
-
-    // Utility Functions
+    // Fisher-Yates shuffle algorithm
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -18,117 +14,91 @@ document.addEventListener('DOMContentLoaded', function() {
         return array;
     }
 
-    function displayError(mediaBoxElement, errorMessage) {
-        mediaBoxElement.innerHTML = `<div class="error-message">${errorMessage}</div>`;
+    // Handle media loading errors
+    function handleMediaError(mediaElement, type) {
+        console.error(`Failed to load ${type}:`, mediaElement.src);
+        mediaElement.remove();
     }
 
-    function createMediaElement(fileType, file) {
-        let mediaElement;
-        switch (fileType) {
-            case 'jpg':
-            case 'jpeg':
-            case 'png':
-            case 'gif':
-            case 'jfif':
-            case 'svg':
-                mediaElement = document.createElement('img');
-                mediaElement.src = file;
-                mediaElement.style.maxWidth = '100%';
-                mediaElement.style.maxHeight = '100%';
-                mediaElement.onerror = () => displayError(document.getElementById('mediaBox'), `Failed to load image: ${file}`);
-                break;
-            case 'mp4':
-            case 'webm':
-            case 'ogg':
-                mediaElement = document.createElement('video');
-                mediaElement.autoplay = true;
-                mediaElement.muted = true;
-                mediaElement.controls = true;
-                mediaElement.src = file;
-                mediaElement.onerror = () => displayError(document.getElementById('mediaBox'), `Failed to load video: ${file}`);
-                mediaElement.addEventListener('ended', displayNextMedia);
-                break;
-            default:
-                displayError(document.getElementById('mediaBox'), `Unsupported file type: ${fileType}`);
-                return null;
+    let currentTimeout;
+
+    // Function to handle video playback
+    function handleVideoPlayback(videoElement, files, index) {
+        let videoTimeout = setTimeout(() => {
+            displayFilesSequentially(files, (index + 1) % files.length);
+        }, IMAGE_DISPLAY_TIME);
+
+        videoElement.addEventListener('play', () => {
+            clearTimeout(videoTimeout);
+        });
+    }
+
+    // Display media files sequentially
+    function displayFilesSequentially(files, index) {
+        const mediaBoxElement = document.getElementById('mediaBox');
+        if (!mediaBoxElement) {
+            console.error("Required DOM element not found.");
+            return;
         }
-        return mediaElement;
-    }
 
-    function displayMediaFile(mediaBoxElement, file) {
         while (mediaBoxElement.firstChild) {
-            mediaBoxElement.removeChild(mediaBoxElement.firstChild);
+            mediaBoxElement.firstChild.remove();
         }
 
-        const fileType = file.split('.').pop().toLowerCase();
-        const mediaElement = createMediaElement(fileType, file);
-        if (mediaElement) {
-            mediaBoxElement.appendChild(mediaElement);
-        }
-    }
+        const file = MEDIA_DIRECTORY + files[index];
+        console.log(file);
+        const fileExtension = file.split('.').pop().toLowerCase();
 
-    function displayNextMedia() {
-        currentIndex++;
-        if (currentIndex >= shuffledFiles.length) {
-            currentIndex = 0;
-        }
-        displayMediaFile(document.getElementById('mediaBox'), MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
-    }
+        if (['jpg', 'jpeg', 'png', 'gif', 'jfif', 'svg'].includes(fileExtension)) {
+            const img = document.createElement('img');
+            img.src = file;
+            img.style.maxWidth = '100%';
+            img.style.maxHeight = '100%';
+            img.onerror = () => handleMediaError(img, 'image');
+            mediaBoxElement.appendChild(img);
 
-    function displayPreviousMedia() {
-        currentIndex--;
-        if (currentIndex < 0) {
-            currentIndex = shuffledFiles.length - 1;
-        }
-        displayMediaFile(document.getElementById('mediaBox'), MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
-    }
+            currentTimeout = setTimeout(() => {
+                displayFilesSequentially(files, (index + 1) % files.length);
+            }, IMAGE_DISPLAY_TIME);
+        } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
+            const videoElement = document.createElement('video');
+            videoElement.autoplay = true;
+            videoElement.muted = true;
+            videoElement.controls = true;
+            videoElement.src = file;
+            videoElement.onerror = () => handleMediaError(videoElement, 'video');
+            mediaBoxElement.appendChild(videoElement);
+            videoElement.play();
 
-    function handleArrowKeyPress(event) {
-        if (event.key === 'ArrowRight') {
-            displayNextMedia();
-        } else if (event.key === 'ArrowLeft') {
-            displayPreviousMedia();
+            handleVideoPlayback(videoElement, files, index);
         }
     }
 
-    function fetchAndDisplayFiles() {
-        fetch(API_ENDPOINT, { method: 'GET' })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch from API. Status: ${response.status} ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (!Array.isArray(data)) {
-                    throw new Error('Unexpected API response format');
-                }
-                shuffledFiles = shuffleArray(data);
-                displayMediaFile(document.getElementById('mediaBox'), MEDIA_DIRECTORY + shuffledFiles[currentIndex]);
-            })
-            .catch(error => {
-                displayError(document.getElementById('mediaBox'), `Error fetching files: ${error.message}`);
-            });
-    }
+    // Fetch the list of files
+    fetch(API_ENDPOINT, { method: 'GET' })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(text => {
+            try {
+                return JSON.parse(text);
+            } catch (err) {
+                throw new Error(`Invalid JSON response: ${text}`);
+            }
+        })
+        .then(jsonData => {
+            if (jsonData.error) {
+                console.error(jsonData.error);
+                return;
+            }
 
-    function fetchConfig() {
-        fetch(CONFIG_ENDPOINT, { method: 'GET' })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch configuration. Status: ${response.status} ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(config => {
-                MEDIA_DIRECTORY = config.MEDIA_DIRECTORY;
-                fetchAndDisplayFiles();
-            })
-            .catch(error => {
-                displayError(document.getElementById('mediaBox'), `Configuration Error: ${error.message}`);
-            });
-    }
-
-    // Event Listeners
-    document.addEventListener('keydown', handleArrowKeyPress);
-    fetchConfig();
+            const files = shuffleArray(Object.values(jsonData));
+            displayFilesSequentially(files, 0);
+        })
+        .catch(error => {
+            console.error("Network error:", error);
+        });
 });
