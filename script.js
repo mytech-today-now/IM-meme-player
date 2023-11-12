@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentIndex = 0; // Current index of the displayed file
     let files = []; // Array to store file names
     let currentTimeout; // Current timeout for image display
-    const file = MEDIA_DIRECTORY + files[index]; // Current file 
     const fileExtension = file.split('.').pop().toLowerCase();
 
     // Fisher-Yates shuffle algorithm
@@ -49,6 +48,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('prevButton').addEventListener('click', () => navigateFiles(-1));
     document.getElementById('nextButton').addEventListener('click', () => navigateFiles(1));
 
+    const file = MEDIA_DIRECTORY + files[index]; // Current file 
+    
     // Display media files sequentially
     function displayFilesSequentially(files, index) {
         currentIndex = index;
