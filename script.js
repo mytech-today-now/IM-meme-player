@@ -35,6 +35,15 @@ document.addEventListener('DOMContentLoaded', function() {
         displayFilesSequentially(files, newIndex);
     }
 
+    // Handle media loading errors
+    function handleMediaError(mediaElement, type, files, index) {
+        console.error(`Failed to load ${type}:`, mediaElement.src);
+        mediaElement.remove();
+
+        // Automatically navigate to the next file
+        displayFilesSequentially(files, (index + 1) % files.length);
+    }
+
     // Add event listeners for navigation buttons
     document.getElementById('prevButton').addEventListener('click', () => navigateFiles(-1));
     document.getElementById('nextButton').addEventListener('click', () => navigateFiles(1));
@@ -61,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
             img.src = file;
             img.style.maxWidth = '100%';
             img.style.maxHeight = '100%';
-            img.onerror = () => handleMediaError(img, 'image');
+            img.onerror = () => handleMediaError(img, 'image', files, index);
             mediaBoxElement.appendChild(img);
 
             clearTimeout(currentTimeout);
@@ -74,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
             videoElement.muted = true;
             videoElement.controls = true;
             videoElement.src = file;
-            videoElement.onerror = () => handleMediaError(videoElement, 'video');
+            videoElement.onerror = () => handleMediaError(videoElement, 'video', files, index);
             mediaBoxElement.appendChild(videoElement);
 
             handleVideoPlayback(videoElement, files, index);
