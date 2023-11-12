@@ -2,10 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Constants
     const API_ENDPOINT = 'https://insidiousmeme.com/filelist.php';
     const IMAGE_DISPLAY_TIME = 5000; // 5 seconds
-    const CUSTOM_TOKEN_VALUE = 'MY_CUSTOM_VALUE';
     const MEDIA_DIRECTORY = 'https://insidiousmeme.com/presenta/memes/';
     let currentIndex = 0; // Current index of the displayed file
     let files = []; // Array to store file names
+    let currentTimeout; // Current timeout for image display
 
     // Fisher-Yates shuffle algorithm
     function shuffleArray(array) {
@@ -22,19 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
         mediaElement.remove();
     }
 
-    let currentTimeout;
-
-    // Function to handle video playback
-    function handleVideoPlayback(videoElement, files, index) {
-        let videoTimeout = setTimeout(() => {
-            displayFilesSequentially(files, (index + 1) % files.length);
-        }, IMAGE_DISPLAY_TIME);
-
-        videoElement.addEventListener('play', () => {
-            clearTimeout(videoTimeout);
-        });
-    }
-
     // Function to handle video playback
     function handleVideoPlayback(videoElement, files, index) {
         videoElement.addEventListener('ended', () => {
@@ -42,19 +29,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Add this new function
+    // Navigate through files
     function navigateFiles(step) {
         const newIndex = (currentIndex + step + files.length) % files.length;
         displayFilesSequentially(files, newIndex);
     }
 
-    // Add event listeners for your buttons
+    // Add event listeners for navigation buttons
     document.getElementById('prevButton').addEventListener('click', () => navigateFiles(-1));
     document.getElementById('nextButton').addEventListener('click', () => navigateFiles(1));
 
     // Display media files sequentially
     function displayFilesSequentially(files, index) {
-        currentIndex = fileIndex;
+        currentIndex = index;
 
         const mediaBoxElement = document.getElementById('mediaBox');
         if (!mediaBoxElement) {
@@ -67,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const file = MEDIA_DIRECTORY + files[index];
-        console.log(file);
         const fileExtension = file.split('.').pop().toLowerCase();
 
         if (['jpg', 'jpeg', 'png', 'gif', 'jfif', 'svg'].includes(fileExtension)) {
@@ -78,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
             img.onerror = () => handleMediaError(img, 'image');
             mediaBoxElement.appendChild(img);
 
+            clearTimeout(currentTimeout);
             currentTimeout = setTimeout(() => {
                 displayFilesSequentially(files, (index + 1) % files.length);
             }, IMAGE_DISPLAY_TIME);
@@ -89,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
             videoElement.src = file;
             videoElement.onerror = () => handleMediaError(videoElement, 'video');
             mediaBoxElement.appendChild(videoElement);
-            videoElement.play();
 
             handleVideoPlayback(videoElement, files, index);
         }
@@ -101,14 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.text();
-        })
-        .then(text => {
-            try {
-                return JSON.parse(text);
-            } catch (err) {
-                throw new Error(`Invalid JSON response: ${text}`);
-            }
+            return response.json();
         })
         .then(jsonData => {
             if (jsonData.error) {
@@ -116,8 +95,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            files = Object.values(jsonData); // Set the files array
-            displayFilesSequentially(0); // Start with the first file
+            files = shuffleArray(Object.values(jsonData)); // Set and shuffle the files array
+            displayFilesSequentially(files, 0); // Start with the first file
         })
         .catch(error => {
             console.error("Network error:", error);
