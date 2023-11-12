@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            files = shuffleArray(Object.values(jsonData)); // Set the files array
+            files = Object.values(jsonData); // Set the files array
             displayFilesSequentially(0); // Start with the first file
         })
         .catch(error => {
