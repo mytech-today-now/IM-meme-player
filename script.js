@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentIndex = 0; // Current index of the displayed file
     let files = []; // Array to store file names
     let currentTimeout; // Current timeout for image display
-    const fileExtension = file.split('.').pop().toLowerCase();
 
     // Fisher-Yates shuffle algorithm
     function shuffleArray(array) {
@@ -53,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Display media files sequentially
     function displayFilesSequentially(files, index) {
         currentIndex = index;
-        const file = MEDIA_DIRECTORY + files[index]; // Current file 
 
         // Check if the file exists (pseudo-code, implement according to your environment)
         if (!fileExists(file)) {
