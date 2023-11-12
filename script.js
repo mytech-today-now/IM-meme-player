@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add this new function
     function navigateFiles(step) {
         const newIndex = (currentIndex + step + files.length) % files.length;
-        displayFilesSequentially(newIndex);
+        displayFilesSequentially(files, newIndex);
     }
 
     // Add event listeners for your buttons
