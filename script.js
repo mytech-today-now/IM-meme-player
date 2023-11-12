@@ -29,12 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function fileExists(url) {
-        return fetch(url, { method: 'HEAD' })
-            .then(response => response.ok)
-            .catch(() => false);
-    }
-
     // Navigate through files
     function navigateFiles(step) {
         currentIndex = (currentIndex + step + files.length) % files.length;
@@ -70,12 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const file = MEDIA_DIRECTORY + files[index];
         const fileExtension = file.split('.').pop().toLowerCase();
-
-        const exists = await fileExists(file);
-        if (!exists) {
-            navigateFiles(1, files);
-            return;
-        }
 
         if (['jpg', 'jpeg', 'png', 'gif', 'jfif', 'svg'].includes(fileExtension)) {
             const img = document.createElement('img');
