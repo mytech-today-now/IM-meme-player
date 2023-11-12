@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const IMAGE_DISPLAY_TIME = 5000; // 5 seconds
     const CUSTOM_TOKEN_VALUE = 'MY_CUSTOM_VALUE';
     const MEDIA_DIRECTORY = 'https://insidiousmeme.com/presenta/memes/';
+    let currentIndex = 0; // Current index of the displayed file
+    let files = []; // Array to store file names
 
     // Fisher-Yates shuffle algorithm
     function shuffleArray(array) {
@@ -33,8 +35,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Function to handle video playback
+    function handleVideoPlayback(videoElement, files, index) {
+        videoElement.addEventListener('ended', () => {
+            displayFilesSequentially(files, (index + 1) % files.length);
+        });
+    }
+
+    // Add this new function
+    function navigateFiles(step) {
+        const newIndex = (currentIndex + step + files.length) % files.length;
+        displayFilesSequentially(newIndex);
+    }
+
+    // Add event listeners for your buttons
+    document.getElementById('prevButton').addEventListener('click', () => navigateFiles(-1));
+    document.getElementById('nextButton').addEventListener('click', () => navigateFiles(1));
+
     // Display media files sequentially
     function displayFilesSequentially(files, index) {
+        currentIndex = fileIndex;
+
         const mediaBoxElement = document.getElementById('mediaBox');
         if (!mediaBoxElement) {
             console.error("Required DOM element not found.");
@@ -95,8 +116,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            const files = shuffleArray(Object.values(jsonData));
-            displayFilesSequentially(files, 0);
+            files = shuffleArray(Object.values(jsonData)); // Set the files array
+            displayFilesSequentially(0); // Start with the first file
         })
         .catch(error => {
             console.error("Network error:", error);
