@@ -24,7 +24,7 @@ Meme Player is a multimedia meme player plugin for WordPress sites, allowing eas
 - PHP 7.2 or higher.
 
 ## Author
-myTech.Today
+myTech.Today (mytechtoday@protonmail.com)
 
 ## Version
 0.0.1
