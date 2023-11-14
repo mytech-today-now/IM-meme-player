@@ -1,5 +1,10 @@
 <?php
 
+// Prevent direct file access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 // Allowed origins
 $allowed_origins = ["https://insidiousmeme.com", "https://www.insidiousmeme.com"];
 
@@ -25,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 try {
     // Configuration values
     $config = [
-        "MEDIA_DIRECTORY" => "./presenta/memes/"
+        "MEDIA_DIRECTORY" => plugin_dir_path(__FILE__) . 'presenta/memes/'
     ];
 
     // Return the JSON response

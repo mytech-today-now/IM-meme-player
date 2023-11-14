@@ -1,5 +1,10 @@
 <?php
 
+// Prevent direct file access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 // CORS headers to allow any origin to access
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
@@ -12,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 // Directory URL
-$dirPath = "./presenta/memes/";
+$dirPath = plugin_dir_path(__FILE__) . 'presenta/memes/';
 
 // Check if the directory exists
 if (!is_dir($dirPath)) {
