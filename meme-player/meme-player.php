@@ -1,5 +1,9 @@
+php
+Copy code
 <?php
-/**
+// meme-player.php
+
+/** 
  * Plugin Name: Meme Player v.0.0.1
  * Author: myTech.Today
  * Description: Multimedia meme player for WordPress sites
@@ -22,6 +26,7 @@ add_action('wp_enqueue_scripts', 'meme_player_enqueue_scripts');
 // Include other PHP files
 include_once plugin_dir_path(__FILE__) . 'config.php';
 include_once plugin_dir_path(__FILE__) . 'filelist.php';
+include_once plugin_dir_path(__FILE__) . 'shortcode.php'; // Include the new shortcode file
 
 // Shortcode to display meme player
 function meme_player_shortcode() {
