@@ -37,10 +37,23 @@ include_once plugin_dir_path(__FILE__) . 'config.php';
 include_once plugin_dir_path(__FILE__) . 'filelist.php';
 include_once plugin_dir_path(__FILE__) . 'shortcode.php'; // Include the new shortcode file
 
-// Shortcode to display meme player
-function meme_player_shortcode() {
+// Shortcode to display meme player with a specific playlist
+function meme_player_shortcode($atts) {
+    // Extract the playlist attribute from the shortcode
+    $atts = shortcode_atts(array(
+        'playlist' => 'default_playlist' // Default playlist if none provided
+    ), $atts, 'meme_player');
+
+    $playlist = $atts['playlist'];
+
+    // Start output buffering
     ob_start();
-    include(plugin_dir_path(__FILE__) . 'index.html');
+
+    // Include the playlist-specific content
+    // You might need to adjust this part based on how your playlists are structured
+    include(plugin_dir_path(__FILE__) . "playlists/{$playlist}.html");
+
+    // Return the buffered content
     return ob_get_clean();
 }
 
