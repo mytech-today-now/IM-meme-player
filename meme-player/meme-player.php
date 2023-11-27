@@ -57,20 +57,16 @@ function folder2post_page() {
     ?>
     <div class="wrap">
         <h1>Folder2Post Configuration</h1>
-        <form method="post" action="<?php echo esc_html(admin_url('admin-post.php')); ?>">
+        <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
             <input type="hidden" name="action" value="folder2post_submit">
+            <input type="hidden" name="folder2post_nonce_field" value="<?php echo wp_create_nonce('folder2post_action'); ?>">
             <?php wp_nonce_field('folder2post_nonce', 'folder2post_nonce_field'); ?>
-
-            <table class="form-table">
-                <tr valign="top">
-                    <th scope="row">Folder Path:</th>
-                    <td><input type="text" name="folder_path" value="" class="regular-text" /></td>
-                </tr>
-            </table>
-
-            <p class="submit">
-                <input type="submit" class="button-primary" value="Save Changes" />
-            </p>
+    
+            <!-- Your existing form fields, e.g., folder_path -->
+            <input type="text" name="folder_path">
+    
+            <!-- Submit button -->
+                <input type="submit" value="Submit">
         </form>
     </div>
     <?php
