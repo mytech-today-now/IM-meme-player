@@ -17,8 +17,9 @@ if (!defined('ABSPATH')) {
 
 // Enqueue scripts and styles
 function meme_player_enqueue_scripts() {
-    wp_enqueue_script('meme-player-script', plugins_url('script.js', __FILE__), array('jquery'), '0.0.1', true);
-    wp_enqueue_style('meme-player-style', plugins_url('style.css', __FILE__), array(), '0.0.1');
+    wp_enqueue_style('playlist-style', plugin_dir_url(__FILE__) . 'style.css');
+    wp_enqueue_script('playlist-script', plugin_dir_url(__FILE__) . 'script.js', array('jquery'), null, true);
+
 }
 function register_playlist_post_type() {
     $args = array(
@@ -36,6 +37,10 @@ add_action('init', 'register_playlist_post_type');
 include_once plugin_dir_path(__FILE__) . 'config.php';
 include_once plugin_dir_path(__FILE__) . 'filelist.php';
 include_once plugin_dir_path(__FILE__) . 'shortcode.php'; // Include the new shortcode file
+include_once(plugin_dir_path(__FILE__) . 'playlist-cpt.php');
+include_once(plugin_dir_path(__FILE__) . 'playlist-manager.php');
+include_once(plugin_dir_path(__FILE__) . 'playlist-display.php');
+include_once(plugin_dir_path(__FILE__) . 'playlist-helpers.php');
 
 // Shortcode to display meme player with a specific playlist
 function meme_player_shortcode($atts) {

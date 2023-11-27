@@ -81,3 +81,8 @@
        (min-width: 7680px) and (max-width: 4320px) /* 8K */ {
     /* Styles for various resolutions */
 }
+
+/* Styles for the playlist */
+.playlist {
+  /* Styles for the playlist display */
+}
