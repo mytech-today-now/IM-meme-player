@@ -46,12 +46,6 @@ function meme_player_shortcode() {
 
 add_shortcode('meme_player', 'meme_player_shortcode');
 
-// Register custom post type
-function register_playlist_post_type() {
-    // Custom post type registration code...
-}
-add_action('init', 'register_playlist_post_type');
-
 // Add Folder2Post menu
 function folder2post_menu() {
     add_menu_page('Folder2Post Configuration', 'Folder2Post', 'manage_options', 'folder2post', 'folder2post_page', 'dashicons-admin-generic');
