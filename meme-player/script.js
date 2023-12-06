@@ -40,6 +40,57 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('prevButton').addEventListener('click', () => navigateFiles(-1));
     document.getElementById('nextButton').addEventListener('click', () => navigateFiles(1));
 
+// Function to fetch media with optional filters (tags, categories, search query)
+async function fetchMedia(filters = {}) {
+    const params = new URLSearchParams({ action, ...filters });
+    const response = await fetch(ajaxurl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const jsonData = await response.json();
+    if (jsonData.error) {
+        console.error(jsonData.error);
+        return [];
+    }
+
+    return shuffleArray(Object.values(jsonData));
+}
+
+// Function to update media display based on filters
+async function updateMediaDisplay(filters) {
+    files = await fetchMedia(filters);
+    displayFilesSequentially(files, 0);
+}
+
+// Event listeners for filter options (tags, categories, search)
+document.getElementById('tagFilter').addEventListener('change', (event) => {
+    updateMediaDisplay({ tag: event.target.value });
+});
+
+document.getElementById('categoryFilter').addEventListener('change', (event) => {
+    updateMediaDisplay({ category: event.target.value });
+});
+
+document.getElementById('searchForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const query = document.getElementById('searchInput').value;
+    updateMediaDisplay({ search: query });
+});
+
+// Initial fetch and display
+fetchMedia().then(fetchedFiles => {
+    files = fetchedFiles;
+    displayFilesSequentially(files, 0);
+}).catch(error => {
+    console.error("Network error:", error);
+});
+
     // Display media files sequentially
     async function displayFilesSequentially(files, index) {
         currentIndex = index;

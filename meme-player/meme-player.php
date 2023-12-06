@@ -79,6 +79,51 @@ function meme_player_enqueue_scripts() {
     wp_enqueue_script('playlist-script', plugin_dir_url(__FILE__) . 'script.js', array('jquery'), null, true);
 
 }
+
+// Function to retrieve media items based on tags, categories, or search terms
+function get_media_items($tag = '', $category = '', $search = '') {
+    global $wpdb;
+    $query = "SELECT * FROM {$wpdb->prefix}media WHERE 1=1";
+
+    if (!empty($tag)) {
+        $query .= $wpdb->prepare(" AND tag = %s", $tag);
+    }
+
+    if (!empty($category)) {
+        $query .= $wpdb->prepare(" AND category = %s", $category);
+    }
+
+    if (!empty($search)) {
+        $query .= $wpdb->prepare(" AND (title LIKE %s OR description LIKE %s)", "%$search%", "%$search%");
+    }
+
+    return $wpdb->get_results($query);
+}
+
+// Modify the existing shortcode function to handle tags, categories, and search
+function meme_player_shortcode($atts) {
+    $atts = shortcode_atts([
+        'playlist' => 'default_playlist',
+        'tag' => '',
+        'category' => '',
+        'search' => ''
+    ], $atts, 'meme_player');
+
+    $media_items = get_media_items($atts['tag'], $atts['category'], $atts['search']);
+
+    ob_start();
+    // Display the media items
+    foreach ($media_items as $item) {
+        echo "<div class='media-item'>";
+        echo "<h3>" . esc_html($item->title) . "</h3>";
+        echo "<p>" . esc_html($item->description) . "</p>";
+        // Add more details as needed
+        echo "</div>";
+    }
+
+    return ob_get_clean();
+}
+
 function register_playlist_post_type() {
     $args = array(
         'public' => true,
