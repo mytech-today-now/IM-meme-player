@@ -11,8 +11,18 @@ function get_playlist_items($playlist_id) {
     // Retrieve the playlist post
     $playlist_post = get_post($playlist_id);
 
+    // Error handling for non-existent posts
+    if (!$playlist_post) {
+        return array(); // Return an empty array if the post doesn't exist
+    }
+
     // Assuming the playlist items are stored as JSON in post_content
     $items = json_decode($playlist_post->post_content, true);
+
+    // Error handling for malformed JSON
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        return array(); // Return an empty array if JSON is malformed
+    }
 
     return is_array($items) ? $items : array();
 }
@@ -39,7 +49,7 @@ function meme_player_shortcode($atts) {
         if (is_image($item)) {
             echo '<img src="' . esc_url($item) . '" alt="Meme Image">';
         } elseif (is_video($item)) {
-            echo '<video controls><source src="' . esc_url($item) . '" type="video/mp4">Your browser does not support the video tag.</video>';
+            echo '<video controls><source src="' . esc_url($item) . '" type="' . get_video_mime_type($item) . '">Your browser does not support the video tag.</video>';
         }
     }
     echo '</div>';
@@ -54,12 +64,23 @@ add_shortcode('meme_player', 'meme_player_shortcode');
 function is_image($file) {
     $image_extensions = ['jpg', 'jpeg', 'png', 'gif'];
     $ext = pathinfo($file, PATHINFO_EXTENSION);
-    return in_array($ext, $image_extensions);
+    return in_array(strtolower($ext), $image_extensions);
 }
 
 function is_video($file) {
     $video_extensions = ['mp4', 'webm', 'ogg'];
     $ext = pathinfo($file, PATHINFO_EXTENSION);
-    return in_array($ext, $video_extensions);
+    return in_array(strtolower($ext), $video_extensions);
+}
+
+// Function to get video MIME type based on file extension
+function get_video_mime_type($file) {
+    $mime_types = [
+        'mp4' => 'video/mp4',
+        'webm' => 'video/webm',
+        'ogg' => 'video/ogg'
+    ];
+    $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+    return isset($mime_types[$ext]) ? $mime_types[$ext] : 'video/mp4'; // Default to mp4 if extension not found
 }
 ?>
