@@ -1,17 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Constants
-    const ajaxurl = my_meme_player_ajax.ajax_url; // WordPress AJAX URL
-    const action = 'fetch_meme_files'; // Action hook for AJAX
-    const IMAGE_DISPLAY_TIME = 5000; // 5 seconds
-    let currentIndex = 0; // Current index of the displayed file
+    const ajaxurl = my_meme_player_ajax.ajax_url; // WordPress AJAX URL for handling AJAX requests
+    const action = 'fetch_meme_files'; // Action hook for AJAX to fetch meme files
+    const IMAGE_DISPLAY_TIME = 5000; // Time in milliseconds to display each image (5 seconds)
+    let currentIndex = 0; // Current index of the displayed file in the files array
     let files = []; // Array to store file names
-    let currentTimeout; // Current timeout for image display
+    let currentTimeout; // Current timeout for image display, used to manage timing
 
-    // Fisher-Yates shuffle algorithm
+    // Fisher-Yates shuffle algorithm to randomize the order of files
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+            [array[i], array[j]] = [array[j], array[i]]; // Swap elements
         }
         return array;
     }
@@ -19,17 +19,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle media loading errors
     function handleMediaError(mediaElement, type) {
         console.error(`Failed to load ${type}:`, mediaElement.src);
-        mediaElement.remove();
+        mediaElement.remove(); // Remove the media element if it fails to load
     }
 
     // Function to handle video playback
     function handleVideoPlayback(videoElement, files, index) {
         videoElement.addEventListener('ended', () => {
+            // When video ends, display the next file
             displayFilesSequentially(files, (index + 1) % files.length);
         });
     }
 
-    // Navigate through files
+    // Navigate through files using the provided step (next or previous)
     function navigateFiles(step) {
         currentIndex = (currentIndex + step + files.length) % files.length;
         displayFilesSequentially(files, currentIndex);
@@ -42,38 +43,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // Display media files sequentially
     async function displayFilesSequentially(files, index) {
         currentIndex = index;
-    
+
         const mediaBoxElement = document.getElementById('mediaBox');
         if (!mediaBoxElement) {
             console.error("Required DOM element not found.");
             return;
         }
-    
-        // Clear existing media
+
+        // Clear existing media before displaying new media
         while (mediaBoxElement.firstChild) {
             mediaBoxElement.firstChild.remove();
         }
-    
+
         const file = files[index];
         const fileExtension = file.split('.').pop().toLowerCase();
-    
+
+        // Display image files
         if (['jpg', 'jpeg', 'png', 'gif', 'jfif', 'svg'].includes(fileExtension)) {
             const img = document.createElement('img');
             img.src = file;
             img.style.maxWidth = '100%';
             img.style.maxHeight = '85vh'; // Set max height to 85% of viewport height
             img.onerror = () => handleMediaError(img, 'image');
-    
-            // Add onload event listener
+
+            // On image load, set a timeout to display the next file after a fixed duration
             img.onload = () => {
                 clearTimeout(currentTimeout);
                 currentTimeout = setTimeout(() => {
                     displayFilesSequentially(files, (index + 1) % files.length);
                 }, IMAGE_DISPLAY_TIME);
             };
-    
+
             mediaBoxElement.appendChild(img);
-        } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
+        } 
+        // Display video files
+        else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
             const videoElement = document.createElement('video');
             videoElement.autoplay = true;
             videoElement.muted = true;
@@ -82,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
             videoElement.style.maxHeight = '85vh'; // Set max height for video
             videoElement.onerror = () => handleMediaError(videoElement, 'video');
             mediaBoxElement.appendChild(videoElement);
-    
+
             handleVideoPlayback(videoElement, files, index);
         }
     }

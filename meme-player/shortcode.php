@@ -33,15 +33,33 @@ function meme_player_shortcode($atts) {
     $playlist_items = get_playlist_items($playlist);
 
     // Render the playlist items
-    // This is a placeholder and should be replaced with actual rendering logic
+    echo '<div class="meme-player-container">';
     foreach ($playlist_items as $item) {
-        // Render each item
-        echo '<div class="playlist-item">' . esc_html($item) . '</div>';
+        // Assuming $item contains the URL of the media
+        if (is_image($item)) {
+            echo '<img src="' . esc_url($item) . '" alt="Meme Image">';
+        } elseif (is_video($item)) {
+            echo '<video controls><source src="' . esc_url($item) . '" type="video/mp4">Your browser does not support the video tag.</video>';
+        }
     }
+    echo '</div>';
 
     // Return the buffered content
     return ob_get_clean();
 }
 
 add_shortcode('meme_player', 'meme_player_shortcode');
+
+// Helper functions to determine media type
+function is_image($file) {
+    $image_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+    $ext = pathinfo($file, PATHINFO_EXTENSION);
+    return in_array($ext, $image_extensions);
+}
+
+function is_video($file) {
+    $video_extensions = ['mp4', 'webm', 'ogg'];
+    $ext = pathinfo($file, PATHINFO_EXTENSION);
+    return in_array($ext, $video_extensions);
+}
 ?>
