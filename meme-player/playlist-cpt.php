@@ -31,7 +31,8 @@ function register_playlist_cpt() {
         'has_archive'        => true,
         'hierarchical'       => false,
         'menu_position'      => null,
-        'supports'           => array('title', 'editor', 'custom-fields'),
+        'supports'           => array('title', 'editor', 'custom-fields', 'thumbnail'),
+        'taxonomies'         => array('category', 'post_tag'),
         'capabilities'       => array(
             'edit_post'          => 'edit_playlist',
             'read_post'          => 'read_playlist',
@@ -48,3 +49,4 @@ function register_playlist_cpt() {
 }
 
 add_action('init', 'register_playlist_cpt');
+
