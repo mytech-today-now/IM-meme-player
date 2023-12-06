@@ -1,85 +1,86 @@
+/* Global Styles */
+body, h1, h2, h3, p, a {
+  font-family: Arial, sans-serif;
+  color: #333; /* Improved contrast for better readability */
+}
+
+a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+a:hover, a:focus {
+  text-decoration: underline;
+  color: #004499;
+}
 
 /* Styling for the previous and next arrows */
 #prevButton, #nextButton {
-    z-index: 1000;
-    cursor: pointer;
-    font-size: 3em; /* Adjusted for better scaling */
-    font-family: Arial, sans-serif;
-    color: navy;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 50%; /* Circular shape */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adding shadow for depth */
-    transition: transform 0.2s; /* Smooth transition for hover effect */
+  z-index: 1000;
+  cursor: pointer;
+  font-size: 3em;
+  color: navy;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
 }
 
-#prevButton:hover, #nextButton:hover {
-    transform: scale(1.1); /* Slightly enlarges the button on hover */
-    background-color: #e0e0e0; /* Change background color on hover */
+#prevButton:hover, #nextButton:hover,
+#prevButton:focus, #nextButton:focus { /* Added focus styles for accessibility */
+  transform: scale(1.1);
+  background-color: #e0e0e0;
 }
 
-
-/* General styling for the container */
-#mediaBoxElement {
-    width: 85%;
-    height: 85%;
-    top: 10%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* General styling for the media container */
+.mediaContainer { /* Renamed for better readability */
+  width: 85%;
+  height: 85%;
+  top: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#mediaBox {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.mediaBox { /* Renamed for better readability */
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 
 /* Responsive styles for different devices and resolutions */
-
-/* iPhone 6 in portrait and landscape */
-@media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 667px) {
-    /* Styles specific to iPhone 6 */
+/* Corrected media queries for proper ranges */
+@media only screen and (min-width: 375px) and (max-width: 667px) {
+  /* Styles specific to iPhone 6 */
 }
 
-/* iPhone 12 in portrait and landscape */
-@media only screen 
-  and (min-device-width: 390px) 
-  and (max-device-width: 844px) {
-    /* Styles specific to iPhone 12 */
+@media only screen and (min-width: 390px) and (max-width: 844px) {
+  /* Styles specific to iPhone 12 */
 }
 
-/* iPhone 15 Max in portrait and landscape */
-@media only screen 
-  and (min-device-width: 428px) 
-  and (max-device-width: 926px) {
-    /* Styles specific to iPhone 15 Max */
+@media only screen and (min-width: 428px) and (max-width: 926px) {
+  /* Styles specific to iPhone 15 Max */
 }
 
-/* Fire Tablet in portrait and landscape */
-@media only screen 
-  and (min-device-width: 600px) 
-  and (max-device-width: 1024px) {
-    /* Styles specific to Fire Tablet */
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+  /* Styles specific to Fire Tablet */
 }
 
 /* Additional media queries for various resolutions */
-@media (min-width: 640px) and (max-width: 320px),
-       (min-width: 1080px) and (max-width: 768px),
-       (min-width: 1280px) and (max-width: 1040px),
-       (min-width: 720px) and (max-width: 480px) /* NTSC */,
-       (min-width: 720px) and (max-width: 576px) /* DV1 */,
-       (min-width: 2048px) and (max-width: 1080px) /* 2K */,
-       (min-width: 3840px) and (max-width: 2160px) /* 4K */,
-       (min-width: 7680px) and (max-width: 4320px) /* 8K */ {
-    /* Styles for various resolutions */
+@media (min-width: 320px) and (max-width: 640px),
+     (min-width: 768px) and (max-width: 1080px),
+     (min-width: 1040px) and (max-width: 1280px),
+     (min-width: 480px) and (max-width: 720px) /* NTSC */,
+     (min-width: 576px) and (max-width: 720px) /* DV1 */,
+     (min-width: 1080px) and (max-width: 2048px) /* 2K */,
+     (min-width: 2160px) and (max-width: 3840px) /* 4K */,
+     (min-width: 4320px) and (max-width: 7680px) /* 8K */ {
+  /* Styles for various resolutions */
 }
 
 /* Styles for the playlist display */
