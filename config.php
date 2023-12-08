@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 try {
     // Configuration values
     $config = [
-        "MEDIA_DIRECTORY" => plugin_dir_path(__FILE__) . 'presenta/memes/'
+        "MEDIA_DIRECTORY" => plugin_dir_path(__FILE__) . 'memes/'
     ];
 
     // Return the JSON response
