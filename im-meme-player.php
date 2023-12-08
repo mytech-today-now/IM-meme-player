@@ -1,4 +1,11 @@
 <?php
+/*
+Plugin Name: IM Meme Player
+Description: A multimedia meme player plugin for WordPress.
+Version: 0.0.1
+Author: Your Name
+*/
+
 // meme-player.php
 
 // Prevent direct file access
