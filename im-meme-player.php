@@ -8,6 +8,10 @@ Author: Your Name
 
 // meme-player.php
 
+/*
+Header Code to cleanup the plugin and prevent direct file access, etc.
+*/
+
 // Prevent direct file access
 defined('ABSPATH') || exit;
 
@@ -89,11 +93,25 @@ function process_xml($xml_string) {
     return $xml;
 }
 
+/*
+Start of Actual Code
+*/
+
 // Enqueue scripts and styles
 function meme_player_enqueue_scripts() {
     wp_enqueue_style('playlist-style', plugin_dir_url(__FILE__) . 'style.css');
     wp_enqueue_script('playlist-script', plugin_dir_url(__FILE__) . 'script.js', array('jquery'), null, true);
 
+}
+
+function meme_player_admin_menu() {
+    add_menu_page('MemePlayer', 'MemePlayer', 'manage_options', 'meme-player-settings', 'meme_player_settings_page', 'dashicons-admin-generic');
+    add_submenu_page('meme-player-settings', 'General Settings', 'General Settings', 'manage_options', 'meme-player-general-settings', 'meme_player_general_settings_page');
+}
+add_action('admin_menu', 'meme_player_admin_menu');
+
+function meme_player_general_settings_page() {
+    // Add form for image display time setting
 }
 
 // Function to retrieve media items based on tags, categories, or search terms
