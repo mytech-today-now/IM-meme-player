@@ -113,10 +113,13 @@ function meme_player_admin_menu() {
 function meme_player_general_settings_page() {
     // Check if the user has submitted the settings
     if (isset($_POST['meme_player_settings_nonce']) && wp_verify_nonce($_POST['meme_player_settings_nonce'], 'meme_player_settings_action')) {
-        // Sanitize and save the setting
-        if (isset($_POST['image_display_time'])) {
-            $image_display_time = intval($_POST['image_display_time']);
+        // Validate and sanitize the setting
+        $image_display_time = isset($_POST['image_display_time']) ? intval($_POST['image_display_time']) : 0;
+        if ($image_display_time > 0) {
             update_option('meme_player_image_display_time', $image_display_time);
+        } else {
+            // Handle invalid input
+            echo '<div class="error">Invalid Image Display Time. Please enter a positive number.</div>';
         }
     }
 
@@ -176,17 +179,6 @@ function register_playlist_post_type() {
 add_action('wp_enqueue_scripts', 'meme_player_enqueue_scripts');
 add_action('init', 'register_playlist_post_type');
 
-// Include other PHP files
-include_once plugin_dir_path(__FILE__) . 'config.php';
-include_once plugin_dir_path(__FILE__) . 'filelist.php';
-include_once plugin_dir_path(__FILE__) . 'shortcode.php'; // Include the new shortcode file
-include_once(plugin_dir_path(__FILE__) . 'playlist-cpt.php');
-include_once(plugin_dir_path(__FILE__) . 'playlist-manager.php');
-include_once(plugin_dir_path(__FILE__) . 'playlist-display.php');
-include_once(plugin_dir_path(__FILE__) . 'playlist-helpers.php');
-
-
-
 // Add Folder2Post menu
 function folder2post_menu() {
     add_menu_page('Folder2Post Configuration', 'Folder2Post', 'manage_options', 'folder2post', 'folder2post_page', 'dashicons-admin-generic');
@@ -222,20 +214,17 @@ function handle_folder2post_form_submission() {
     if (current_user_can('manage_options')) {
         $folderPath = sanitize_text_field($_POST['folder_path']);
     
-        // Check if the folder exists
+        // Validate the folder path
         if (!file_exists($folderPath) || !is_dir($folderPath)) {
             wp_die('The specified folder does not exist.');
         }
     
-        // Read the contents of the folder
+        // Attempt to read the folder contents
         $files = scandir($folderPath);
         if ($files === false) {
             wp_die('Failed to read the folder contents.');
         }
-    
-        // Filter out '.' and '..'
-        $files = array_diff($files, array('.', '..'));
-    
+        
         // Convert the file list to JSON
         $json_data = json_encode($files);
         if ($json_data === false) {
