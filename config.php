@@ -44,23 +44,4 @@ try {
     ]);
 }
 
-function meme_player_shortcode() {
-    ob_start(); // Start output buffering
-    ?>
-    <!-- Your HTML content goes here -->
-    <div class="container">
-        <h1>IM Meme Player</h1>
-        <div id="mediaBoxElement">
-            <div id="prevButton">&#8678;</div>
-            <div id="mediaBox"></div>
-            <div id="nextButton">&#8680;</div>
-        </div>
-    </div>
-    <?php
-    return ob_get_clean(); // Return the buffered content
-}
-
-add_shortcode('meme_player', 'meme_player_shortcode');
-
-
 ?>
