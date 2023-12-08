@@ -210,27 +210,7 @@ include_once(plugin_dir_path(__FILE__) . 'playlist-manager.php');
 include_once(plugin_dir_path(__FILE__) . 'playlist-display.php');
 include_once(plugin_dir_path(__FILE__) . 'playlist-helpers.php');
 
-// Shortcode to display meme player with a specific playlist
-function meme_player_shortcode($atts) {
-    // Extract the playlist attribute from the shortcode
-    $atts = shortcode_atts(array(
-        'playlist' => 'default_playlist' // Default playlist if none provided
-    ), $atts, 'meme_player');
 
-    $playlist = $atts['playlist'];
-
-    // Start output buffering
-    ob_start();
-
-    // Include the playlist-specific content
-    // You might need to adjust this part based on how your playlists are structured
-    include(plugin_dir_path(__FILE__) . "playlists/{$playlist}.html");
-
-    // Return the buffered content
-    return ob_get_clean();
-}
-
-add_shortcode('meme_player', 'meme_player_shortcode');
 
 // Add Folder2Post menu
 function folder2post_menu() {
