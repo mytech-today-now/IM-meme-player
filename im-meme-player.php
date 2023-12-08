@@ -138,7 +138,7 @@ function meme_player_shortcode($atts) {
     }
 
     return ob_get_clean();
-}890
+}
 
 function register_playlist_post_type() {
     $args = array(
