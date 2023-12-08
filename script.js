@@ -169,3 +169,22 @@ fetchMedia().then(fetchedFiles => {
         console.error("Network error:", error);
     });
 });
+
+// Folder Selector for Meme Player
+jQuery(document).ready(function($) {
+    $('#folder_path_button').click(function(e) {
+        e.preventDefault();
+        var file_frame = wp.media.frames.file_frame = wp.media({
+            title: 'Select Folder',
+            button: {
+                text: 'Use this folder'
+            },
+            multiple: false
+        });
+        file_frame.on('select', function() {
+            var attachment = file_frame.state().get('selection').first().toJSON();
+            $('#folder_path').val(attachment.url);
+        });
+        file_frame.open();
+    });
+});
