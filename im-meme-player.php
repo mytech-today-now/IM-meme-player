@@ -11,6 +11,15 @@ Author: Your Name
 // Prevent direct file access
 defined('ABSPATH') || exit;
 
+// Current: Including other PHP files
+include_once plugin_dir_path(__FILE__) . 'config.php';
+include_once plugin_dir_path(__FILE__) . 'filelist.php';
+include_once plugin_dir_path(__FILE__) . 'shortcode.php';
+include_once plugin_dir_path(__FILE__) . 'playlist-cpt.php';
+include_once plugin_dir_path(__FILE__) . 'playlist-manager.php';
+include_once plugin_dir_path(__FILE__) . 'playlist-display.php';
+include_once plugin_dir_path(__FILE__) . 'playlist-helpers.php';
+
 // Secure Database Query (SQL Injection)
 function get_playlist($playlist_id) {
     global $wpdb;

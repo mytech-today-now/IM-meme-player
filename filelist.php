@@ -16,8 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-// Directory URL
-$dirPath = plugin_dir_path(__FILE__) . 'presenta/memes/';
+// Current: Directory URL
+$dirPath = plugin_dir_path(__FILE__) . 'memes/';
+
 
 // Check if the directory exists
 if (!is_dir($dirPath)) {
