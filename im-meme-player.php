@@ -104,11 +104,11 @@ function meme_player_enqueue_scripts() {
 
 }
 
+// Add the settings page to the MemePlayer menu
 function meme_player_admin_menu() {
     add_menu_page('MemePlayer', 'MemePlayer', 'manage_options', 'meme-player-settings', 'meme_player_settings_page', 'dashicons-admin-generic');
     add_submenu_page('meme-player-settings', 'General Settings', 'General Settings', 'manage_options', 'meme-player-general-settings', 'meme_player_general_settings_page');
 }
-add_action('admin_menu', 'meme_player_admin_menu');
 
 function meme_player_general_settings_page() {
     // Check if the user has submitted the settings
@@ -313,12 +313,6 @@ function handle_folder2post_form_submission() {
     } else {
         wp_die('You do not have sufficient permissions to access this page.');
     }
-}
-
-// Add the settings page to the MemePlayer menu
-function meme_player_admin_menu() {
-    add_menu_page('MemePlayer', 'MemePlayer', 'manage_options', 'meme-player-settings', 'meme_player_settings_page', 'dashicons-admin-generic');
-    add_submenu_page('meme-player-settings', 'General Settings', 'General Settings', 'manage_options', 'meme-player-general-settings', 'meme_player_general_settings_page');
 }
 
 add_action('admin_menu', 'meme_player_admin_menu');
