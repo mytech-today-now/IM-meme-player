@@ -111,7 +111,38 @@ function meme_player_admin_menu() {
 add_action('admin_menu', 'meme_player_admin_menu');
 
 function meme_player_general_settings_page() {
-    // Add form for image display time setting
+    // Check if the user has submitted the settings
+    if (isset($_POST['meme_player_settings_nonce']) && wp_verify_nonce($_POST['meme_player_settings_nonce'], 'meme_player_settings_action')) {
+        // Sanitize and save the setting
+        if (isset($_POST['image_display_time'])) {
+            $image_display_time = intval($_POST['image_display_time']);
+            update_option('meme_player_image_display_time', $image_display_time);
+        }
+    }
+
+    // Retrieve the current setting value
+    $current_value = get_option('meme_player_image_display_time', 5); // Default to 5 if not set
+
+    ?>
+    <div class="wrap">
+        <h1>MemePlayer General Settings</h1>
+        <form method="post" action="">
+            <?php wp_nonce_field('meme_player_settings_action', 'meme_player_settings_nonce'); ?>
+
+            <table class="form-table">
+                <tr valign="top">
+                    <th scope="row">Image Display Time (seconds)</th>
+                    <td>
+                        <input type="number" name="image_display_time" value="<?php echo esc_attr($current_value); ?>" min="1" />
+                        <p class="description">Set the duration for how long each image should be displayed in the player.</p>
+                    </td>
+                </tr>
+            </table>
+
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <?php
 }
 
 // Function to retrieve media items based on tags, categories, or search terms
@@ -283,6 +314,14 @@ function handle_folder2post_form_submission() {
         wp_die('You do not have sufficient permissions to access this page.');
     }
 }
+
+// Add the settings page to the MemePlayer menu
+function meme_player_admin_menu() {
+    add_menu_page('MemePlayer', 'MemePlayer', 'manage_options', 'meme-player-settings', 'meme_player_settings_page', 'dashicons-admin-generic');
+    add_submenu_page('meme-player-settings', 'General Settings', 'General Settings', 'manage_options', 'meme-player-general-settings', 'meme_player_general_settings_page');
+}
+
+add_action('admin_menu', 'meme_player_admin_menu');
 add_action('admin_post_folder2post_submit', 'handle_folder2post_form_submission');
 
 add_shortcode('meme_player', 'meme_player_shortcode');
