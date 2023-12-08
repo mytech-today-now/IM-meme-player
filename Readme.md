@@ -1,42 +1,43 @@
-# Meme Player v.0.0.1
+# IM Meme Player v.0.0.1
 
-## Description
-Meme Player is a multimedia meme player plugin for WordPress sites, allowing easy integration and display of meme content in a dynamic and interactive manner.
+## Overview
+IM Meme Player is a WordPress plugin designed to seamlessly integrate and display multimedia meme content on WordPress sites. It offers a dynamic and interactive way to engage visitors with meme-based media.
 
 ## Installation
-1. Download the plugin zip file.
-2. In your WordPress dashboard, go to Plugins > Add New.
-3. Click on 'Upload Plugin' and choose the zip file.
-4. Activate the plugin after the installation.
+1. Download the IM Meme Player plugin zip file.
+2. Navigate to 'Plugins > Add New' in your WordPress dashboard.
+3. Click 'Upload Plugin' and select the downloaded zip file.
+4. Activate the plugin following the installation.
 
-## Usage
-- Use the shortcode `[meme_player]` in your posts or pages to display the meme player.
-- Configure the plugin settings in the WordPress admin panel under 'Settings > Meme Player'.
+## How to Use
+- Embed the meme player in posts or pages using the `[meme_player]` shortcode.
+- Adjust plugin settings via 'Settings > Meme Player' in the WordPress admin panel.
 
-## Features
-- Dynamic loading of meme content.
-- Interactive navigation buttons for media browsing.
-- Responsive design for various screen sizes.
-- Customizable settings for media display.
+## Key Features
+- Dynamically loads and displays meme content.
+- Interactive media navigation controls.
+- Responsive design compatible with various device screen sizes.
+- Customizable media display settings.
 
-## Requirements
-- WordPress 5.0 or higher.
-- PHP 7.2 or higher.
+## System Requirements
+- WordPress version 5.0 or later.
+- PHP version 7.2 or higher.
 
-## Author
-myTech.Today (mytechtoday@protonmail.com)
+## Author Information
+Developed by myTech.Today
+Contact: mytechtoday@protonmail.com
 
-## Version
+## Current Version
 0.0.1
 
-## First Published Date
+## Initial Release Date
 2023-10-21
 
-## License
-This plugin is licensed under the GPL v2 or later.
+## Licensing
+GPL v2 or later.
 
-## Support
-For support, please visit [GitHub repository issues](https://github.com/mytech-today-now/IM-meme-player/issues).
+## Support and Issues
+For support and issues, please visit the [GitHub Issues page](https://github.com/mytech-today-now/IM-meme-player/issues).
 
 ## Acknowledgements
-Thanks to the contributors and supporters of the IM Meme Player project.
+Special thanks to all contributors and supporters of the IM Meme Player project.
