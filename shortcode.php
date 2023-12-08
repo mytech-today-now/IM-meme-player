@@ -58,6 +58,30 @@ function meme_player_shortcode($atts) {
     return ob_get_clean();
 }
 
+// Modify the existing shortcode function to handle tags, categories, and search
+function meme_player_shortcode($atts) {
+    $atts = shortcode_atts([
+        'playlist' => 'default_playlist',
+        'tag' => '',
+        'category' => '',
+        'search' => ''
+    ], $atts, 'meme_player');
+
+    $media_items = get_media_items($atts['tag'], $atts['category'], $atts['search']);
+
+    ob_start();
+    // Display the media items
+    foreach ($media_items as $item) {
+        echo "<div class='media-item'>";
+        echo "<h3>" . esc_html($item->title) . "</h3>";
+        echo "<p>" . esc_html($item->description) . "</p>";
+        // Add more details as needed
+        echo "</div>";
+    }
+
+    return ob_get_clean();
+}
+
 add_shortcode('meme_player', 'meme_player_shortcode');
 
 // Helper functions to determine media type

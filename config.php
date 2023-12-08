@@ -5,8 +5,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Allowed origins
-$allowed_origins = ["https://insidiousmeme.com", "https://www.insidiousmeme.com"];
+// Fetch user-defined allowed origins or default to the server's root domain
+$allowed_origins = get_option('meme_player_allowed_origins', [get_site_url()]);
 
 // Check the Origin header of the incoming request
 $request_origin = $_SERVER['HTTP_ORIGIN'] ?? '';
