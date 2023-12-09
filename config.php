@@ -15,6 +15,7 @@ if (in_array($request_origin, $allowed_origins, true)) {
     header("Access-Control-Allow-Origin: $request_origin");
 } else {
     // If the origin is not allowed, exit early
+    error_log("CORS policy violation.");
     exit('CORS policy violation.');
 }
 
@@ -24,6 +25,7 @@ header('Content-Type: application/json');
 
 // Exit early if it's an OPTIONS request (pre-flight)
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    error_log("REQUEST_METHOD: Exit early if it's an OPTIONS request (pre-flight)");
     exit;
 }
 
