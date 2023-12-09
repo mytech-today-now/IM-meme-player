@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const fileExtension = file.split('.').pop().toLowerCase();
 
         // Display image files
-        if (['jpg', 'jpeg', 'png', 'gif', 'jfif', 'svg'].includes(fileExtension)) {
+        if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'tif', 'tiff', 'jfif'].includes(fileExtension)) {
             const img = document.createElement('img');
             img.src = file;
             img.style.maxWidth = '100%';

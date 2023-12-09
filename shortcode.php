@@ -6,13 +6,19 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Function to retrieve playlist items
+/**
+ * Retrieves playlist items.
+ *
+ * @param int|string $playlist_id The ID or name of the playlist.
+ * @return array The playlist items.
+ */
 function get_playlist_items($playlist_id) {
     // Retrieve the playlist post
     $playlist_post = get_post($playlist_id);
 
     // Error handling for non-existent posts
     if (!$playlist_post) {
+        error_log("Playlist post with ID $playlist_id not found.");
         return array(); // Return an empty array if the post doesn't exist
     }
 
@@ -21,13 +27,19 @@ function get_playlist_items($playlist_id) {
 
     // Error handling for malformed JSON
     if (json_last_error() !== JSON_ERROR_NONE) {
+        error_log("Malformed JSON in playlist post with ID $playlist_id.");
         return array(); // Return an empty array if JSON is malformed
     }
 
     return is_array($items) ? $items : array();
 }
 
-// Shortcode to display meme player with a specific playlist
+/**
+ * Shortcode to display meme player with a specific playlist.
+ *
+ * @param array $atts Shortcode attributes.
+ * @return string HTML content to display.
+ */
 function meme_player_shortcode($atts) {
     // Extract the playlist attribute from the shortcode
     $atts = shortcode_atts(array(
@@ -86,7 +98,7 @@ add_shortcode('meme_player', 'meme_player_shortcode');
 
 // Helper functions to determine media type
 function is_image($file) {
-    $image_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+    $image_extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'tif', 'tiff', 'jfif'];
     $ext = pathinfo($file, PATHINFO_EXTENSION);
     return in_array(strtolower($ext), $image_extensions);
 }
