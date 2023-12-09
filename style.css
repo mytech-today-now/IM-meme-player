@@ -11,7 +11,7 @@ a {
 
 a:hover, a:focus {
   text-decoration: underline;
-  color: #004499;
+  color: #004499; /* Added focus styles for accessibility */
 }
 
 /* Styling for the previous and next arrows */
@@ -28,9 +28,9 @@ a:hover, a:focus {
 }
 
 #prevButton:hover, #nextButton:hover,
-#prevButton:focus, #nextButton:focus { /* Added focus styles for accessibility */
+#prevButton:focus, #nextButton:focus {
   transform: scale(1.1);
-  background-color: #e0e0e0;
+  background-color: #e0e0e0; /* Enhance visibility on hover/focus */
 }
 
 /* General styling for the media container */
@@ -109,7 +109,7 @@ a:hover, a:focus {
 
 .playlist-item:hover {
   background-color: #efefef;
-  cursor: pointer;
+  cursor: pointer; /* Enhance user interaction */
 }
 
 /* Add any additional styles as needed */
