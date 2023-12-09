@@ -144,6 +144,49 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 });
 
+/**
+ * Updates the order of playlist items on the server.
+ * @param {Array} orderedIds - Array of item IDs in their new order.
+ */
+function updatePlaylistOrder(orderedIds) {
+    // Prepare data for AJAX request
+    const data = {
+        action: 'update_playlist_order', // WordPress action hook
+        ordered_ids: orderedIds,         // Ordered IDs of playlist items
+        nonce: my_meme_player_ajax.nonce // Nonce for security verification
+    };
+
+    // AJAX request to update the playlist order
+    $.ajax({
+        url: my_meme_player_ajax.ajax_url, // AJAX URL provided by WordPress
+        type: 'POST',
+        data: data,
+        success: function(response) {
+            // Handle success
+            if (response.success) {
+                console.log('Playlist order updated successfully.');
+            } else {
+                // Handle failure (e.g., invalid nonce, database error)
+                console.error('Failed to update playlist order:', response.error);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // Log detailed error information for debugging
+            console.error('AJAX error in updating playlist order:', textStatus, errorThrown);
+        }
+    });
+}
+
+// Sortable playlist items for Meme Player Playlist Edit page
+$( ".playlist-items" ).sortable({
+    update: function(event, ui) {
+        var orderedIds = $(this).sortable('toArray').map(function(item) {
+            return $(item).data('id');
+        });
+        updatePlaylistOrder(orderedIds);
+    }
+});
+
 // Folder Selector for Meme Player
 jQuery(document).ready(function($) {
     $('#folder_path_button').click(function(e) {

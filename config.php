@@ -15,7 +15,7 @@ if (in_array($request_origin, $allowed_origins, true)) {
     header("Access-Control-Allow-Origin: $request_origin");
 } else {
     // If the origin is not allowed, exit early
-    error_log("CORS policy violation.");
+    ConsoleLogger::error("CORS policy violation.");
     exit('CORS policy violation.');
 }
 

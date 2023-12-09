@@ -1,6 +1,35 @@
 <?php
 // playlist-helpers.php
 
+// =====================
+// Playlist CRUD methods
+// =====================
+// get_playlist_items() retrieves playlist items from the database with optional filtering.
+// add_playlist_item() adds an item to the playlist with tagging and categorization.
+// delete_playlist_item() deletes a playlist item from the database.
+// reorder_playlist_items() updates the item_order column for each item in the playlist.
+// =====================
+// Example usage
+// =====================
+// $playlist_id = 1; // Example playlist ID
+// $items = get_playlist_items($playlist_id, 'funny', 'video');
+// Display or process $items as needed
+// =====================
+// ConsoleLogger class
+// =====================
+// Mimics JavaScript's console.log and console.error functionality in PHP.
+// =====================
+// Example usage
+// =====================
+// ConsoleLogger::log('This is an informational message.');
+// ConsoleLogger::error('This is an error message.');
+
+
+// Prevent direct file access
+if (!defined('ABSPATH')) {
+    exit; 
+}
+
 global $wpdb; // Use the global WordPress database object
 
 /**
@@ -34,6 +63,8 @@ function get_playlist_items($playlist_id, $tag = null, $category = null) {
         // Log error if query fails
         error_log("Error executing query: " . $wpdb->last_error);
         return [];
+    } else {
+        error_log("Success: Retrieved " . count($results) . " rows.");
     }
 
     return $results;
@@ -57,11 +88,64 @@ function add_playlist_item($playlist_id, $item_name, $tag = null, $category = nu
     if ($result === false) {
         // Log error if query fails
         error_log("Error executing query: " . $wpdb->last_error);
+    } else {
+        error_log("Success: Inserted $result row.");
     }
 }
 
-// Example usage
-$playlist_id = 1; // Example playlist ID
-$items = get_playlist_items($playlist_id, 'funny', 'video');
-// Display or process $items as needed
+// delete_playlist_item() deletes a playlist item from the database.
+function delete_playlist_item($playlist_id, $item_id) {
+    global $wpdb;
+    $query = "DELETE FROM {$wpdb->prefix}playlist_items WHERE playlist_id = %d AND id = %d";
+    $prepared_query = $wpdb->prepare($query, $playlist_id, $item_id);
+    $result = $wpdb->query($prepared_query);
+
+    if ($result === false) {
+        error_log("Error executing query: " . $wpdb->last_error);
+    } else {
+        error_log("Success: Deleted $result row.");
+    }
+}
+
+// reorder_playlist_items() updates the item_order column for each item in the playlist.
+function reorder_playlist_items($playlist_id, $ordered_ids) {
+    global $wpdb;
+    foreach ($ordered_ids as $order => $item_id) {
+        $query = "UPDATE {$wpdb->prefix}playlist_items SET item_order = %d WHERE id = %d AND playlist_id = %d";
+        $prepared_query = $wpdb->prepare($query, $order, $item_id, $playlist_id);
+        $wpdb->query($prepared_query);
+    }
+}
+
+/**
+ * Class ConsoleLogger
+ * Mimics JavaScript's console.log and console.error functionality in PHP.
+ */
+class ConsoleLogger {
+
+    /**
+     * Logs a message as an informational log.
+     * 
+     * @param mixed $message The message to log.
+     */
+    public static function log($message) {
+        if (is_array($message) || is_object($message)) {
+            $message = print_r($message, true);
+        }
+        error_log("Info: " . $message);
+    }
+
+    /**
+     * Logs a message as an error.
+     * 
+     * @param mixed $message The message to log.
+     */
+    public static function error($message) {
+        if (is_array($message) || is_object($message)) {
+            $message = print_r($message, true);
+        }
+        error_log("Error: " . $message);
+    }
+}
+
 ?>
