@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Fetch user-defined allowed origins or default to the server's root domain
+// Fetch user-defined allowed origins or default to the server\'s root domain
 $allowed_origins = get_option('meme_player_allowed_origins', [get_site_url()]);
 
 // Check the Origin header of the incoming request
