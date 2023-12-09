@@ -3,7 +3,7 @@
 Plugin Name: IM Meme Player
 Description: A multimedia meme player plugin for WordPress.
 Version: 0.0.1
-Author: Your Name
+Author: myTech.Today
 */
 
 // Prevent direct file access
@@ -219,24 +219,50 @@ function folder2post_page() {
     <?php
 }
 
-// Handle the form submission
+// Folder2Post form submission handler
+class FolderReader {
+    private $folderPath;
+
+    public function __construct($folderPath) {
+        $this->folderPath = sanitize_text_field($folderPath);
+        $this->validateFolderPath();
+    }
+
+    private function validateFolderPath() {
+        if (!file_exists($this->folderPath) || !is_dir($this->folderPath)) {
+            wp_die('The specified folder does not exist.');
+        }
+    }
+
+    public function readFolder() {
+        $files = scandir($this->folderPath);
+        if ($files === false) {
+            wp_die('Failed to read the folder contents.');
+        }
+        return $files;
+    }
+}
+
+
+/**
+ * Handles the form submission for Folder2Post.
+ */
 function handle_folder2post_form_submission() {
     if (!isset($_POST['folder2post_nonce_field']) || !wp_verify_nonce($_POST['folder2post_nonce_field'], 'folder2post_nonce')) {
         wp_die('Security check failed');
     }
 
     if (current_user_can('manage_options')) {
-        $folderPath = sanitize_text_field($_POST['folder_path']);
-    
-        // Validate the folder path
-        if (!file_exists($folderPath) || !is_dir($folderPath)) {
-            wp_die('The specified folder does not exist.');
-        }
-    
-        // Attempt to read the folder contents
-        $files = scandir($folderPath);
-        if ($files === false) {
-            wp_die('Failed to read the folder contents.');
+        
+        // Validate the folder path & read the folder contents
+        if (isset($_POST['folder_path'])) {
+            try {
+                $folderReader = new FolderReader($_POST['folder_path']);
+                $files = $folderReader->readFolder();
+                // Process the $files as needed
+            } catch (Exception $e) {
+                // Handle exceptions if necessary
+            }
         }
 
         // Convert the file list to JSON

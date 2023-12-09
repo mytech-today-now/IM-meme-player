@@ -1,7 +1,13 @@
 <?php
 // playlist-cpt.php
 
+/**
+ * Registers a custom post type 'playlist'.
+ * This function sets up the labels, arguments, and capabilities for the playlist post type.
+ * It is hooked into WordPress 'init' action.
+ */
 function register_playlist_cpt() {
+    // Define labels for the Playlist post type
     $labels = array(
         'name'               => 'Playlists',
         'singular_name'      => 'Playlist',
@@ -19,6 +25,7 @@ function register_playlist_cpt() {
         'not_found_in_trash' => 'No playlists found in Trash.'
     );
 
+    // Define arguments for the Playlist post type
     $args = array(
         'labels'             => $labels,
         'public'             => true,
@@ -45,8 +52,12 @@ function register_playlist_cpt() {
         'map_meta_cap'       => true
     );
 
-    register_post_type('playlist', $args);
+    // Register the post type
+    if (!register_post_type('playlist', $args)) {
+        // Error handling if the post type registration fails
+        error_log('Failed to register custom post type "playlist"');
+    }
 }
 
+// Hook the function into the 'init' action
 add_action('init', 'register_playlist_cpt');
-
