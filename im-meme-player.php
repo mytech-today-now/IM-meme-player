@@ -6,16 +6,10 @@ Version: 0.0.1
 Author: Your Name
 */
 
-// meme-player.php
-
-/*
-Header Code to cleanup the plugin and prevent direct file access, etc.
-*/
-
 // Prevent direct file access
 defined('ABSPATH') || exit;
 
-// Current: Including other PHP files
+// Including other PHP files
 include_once plugin_dir_path(__FILE__) . 'config.php';
 include_once plugin_dir_path(__FILE__) . 'filelist.php';
 include_once plugin_dir_path(__FILE__) . 'shortcode.php';
@@ -24,14 +18,33 @@ include_once plugin_dir_path(__FILE__) . 'playlist-manager.php';
 include_once plugin_dir_path(__FILE__) . 'playlist-display.php';
 include_once plugin_dir_path(__FILE__) . 'playlist-helpers.php';
 
-// Secure Database Query (SQL Injection)
+/**
+ * Retrieves a playlist from the database.
+ * 
+ * @param int $playlist_id The ID of the playlist.
+ * @return object|null The playlist object or null if not found.
+ */
 function get_playlist($playlist_id) {
     global $wpdb;
     $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}playlists WHERE id = %d", $playlist_id);
-    return $wpdb->get_row($query);
+
+    try {
+        $result = $wpdb->get_row($query);
+        if (!$result) {
+            throw new Exception('Playlist not found.');
+        }
+        return $result;
+    } catch (Exception $e) {
+        error_log('Error in get_playlist: ' . $e->getMessage());
+        return null;
+    }
 }
 
-// Sanitize Output (XSS)
+/**
+ * Sanitizes and echoes a string.
+ * 
+ * @param string $string The string to sanitize and echo.
+ */
 function safe_echo($string) {
     echo esc_html($string);
 }
@@ -97,11 +110,12 @@ function process_xml($xml_string) {
 Start of Actual Code
 */
 
-// Enqueue scripts and styles
+/**
+ * Enqueues scripts and styles for the plugin.
+ */
 function meme_player_enqueue_scripts() {
     wp_enqueue_style('playlist-style', plugin_dir_url(__FILE__) . 'style.css');
     wp_enqueue_script('playlist-script', plugin_dir_url(__FILE__) . 'script.js', array('jquery'), null, true);
-
 }
 
 // Add the settings page to the MemePlayer menu
@@ -224,7 +238,7 @@ function handle_folder2post_form_submission() {
         if ($files === false) {
             wp_die('Failed to read the folder contents.');
         }
-        
+
         // Convert the file list to JSON
         $json_data = json_encode($files);
         if ($json_data === false) {
