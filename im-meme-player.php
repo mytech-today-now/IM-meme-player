@@ -35,7 +35,7 @@ function get_playlist($playlist_id) {
         }
         return $result;
     } catch (Exception $e) {
-        error_log('Error in get_playlist: ' . $e->getMessage());
+        ConsoleLogger::error('Error in get_playlist: ' . $e->getMessage());
         return null;
     }
 }

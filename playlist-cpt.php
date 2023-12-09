@@ -55,7 +55,7 @@ function register_playlist_cpt() {
     // Register the post type
     if (!register_post_type('playlist', $args)) {
         // Error handling if the post type registration fails
-        error_log('Failed to register custom post type "playlist"');
+        ConsoleLogger::error('Failed to register custom post type "playlist"');
     }
 }
 

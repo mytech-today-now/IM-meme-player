@@ -25,7 +25,7 @@ header('Content-Type: application/json');
 
 // Exit early if it's an OPTIONS request (pre-flight)
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    error_log("REQUEST_METHOD: Exit early if it's an OPTIONS request (pre-flight)");
+    ConsoleLogger::error("REQUEST_METHOD: Exit early if it's an OPTIONS request (pre-flight)");
     exit;
 }
 
@@ -38,7 +38,7 @@ try {
     // Return the JSON response
     echo json_encode($config);
 } catch (Exception $e) {
-    error_log("Error in config.php: " . $e->getMessage() . " on line " . $e->getLine());
+    ConsoleLogger::error("Error in config.php: " . $e->getMessage() . " on line " . $e->getLine());
     // Structured error response
     echo json_encode([
         "status" => "error",

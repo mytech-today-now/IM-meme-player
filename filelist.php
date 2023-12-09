@@ -28,7 +28,7 @@ $dirPath = plugin_dir_path(__FILE__) . 'memes/';
 
 // Check if the directory exists
 if (!is_dir($dirPath)) {
-    error_log("Directory not found: " . $dirPath);
+    ConsoleLogger::error("Directory not found: " . $dirPath);
     echo json_encode(["error" => "Directory not found."]);
     exit;
 }
@@ -46,7 +46,7 @@ try {
     // Return the JSON response
     echo json_encode($files);
 } catch (Exception $e) {
-    error_log("Error in filelist.php: " . $e->getMessage());
+    ConsoleLogger::error("Error in filelist.php: " . $e->getMessage());
     echo json_encode(["error" => $e->getMessage()]);
     exit;
 }

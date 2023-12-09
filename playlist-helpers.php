@@ -61,10 +61,10 @@ function get_playlist_items($playlist_id, $tag = null, $category = null) {
 
     if ($results === null) {
         // Log error if query fails
-        error_log("Error executing query: " . $wpdb->last_error);
+        ConsoleLogger::error("Error executing query: " . $wpdb->last_error);
         return [];
     } else {
-        error_log("Success: Retrieved " . count($results) . " rows.");
+        ConsoleLogger::error("Success: Retrieved " . count($results) . " rows.");
     }
 
     return $results;
@@ -87,9 +87,9 @@ function add_playlist_item($playlist_id, $item_name, $tag = null, $category = nu
 
     if ($result === false) {
         // Log error if query fails
-        error_log("Error executing query: " . $wpdb->last_error);
+        ConsoleLogger::error("Error executing query: " . $wpdb->last_error);
     } else {
-        error_log("Success: Inserted $result row.");
+        ConsoleLogger::error("Success: Inserted $result row.");
     }
 }
 
@@ -101,9 +101,9 @@ function delete_playlist_item($playlist_id, $item_id) {
     $result = $wpdb->query($prepared_query);
 
     if ($result === false) {
-        error_log("Error executing query: " . $wpdb->last_error);
+        ConsoleLogger::error("Error executing query: " . $wpdb->last_error);
     } else {
-        error_log("Success: Deleted $result row.");
+        ConsoleLogger::error("Success: Deleted $result row.");
     }
 }
 
@@ -132,7 +132,7 @@ class ConsoleLogger {
         if (is_array($message) || is_object($message)) {
             $message = print_r($message, true);
         }
-        error_log("Info: " . $message);
+        ConsoleLogger::error("Info: " . $message);
     }
 
     /**
@@ -144,7 +144,7 @@ class ConsoleLogger {
         if (is_array($message) || is_object($message)) {
             $message = print_r($message, true);
         }
-        error_log("Error: " . $message);
+        ConsoleLogger::error("Error: " . $message);
     }
 }
 

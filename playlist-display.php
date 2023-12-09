@@ -13,7 +13,7 @@ function display_playlist($playlist_id) {
     // Check if the playlist exists
     if (!$playlist) {
         echo "Playlist not found.";
-        error_log("Playlist with ID $playlist_id not found."); // Log error for debugging
+        ConsoleLogger::error("Playlist with ID $playlist_id not found."); // Log error for debugging
         return;
     }
 
@@ -40,7 +40,7 @@ function display_playlist($playlist_id) {
             echo '<a href="' . esc_url(get_permalink($item_id)) . '">' . esc_html($item->post_title) . '</a>';
             echo '</li>';
         } else {
-            error_log("Playlist item with ID $item_id not found."); // Log error for missing items
+            ConsoleLogger::error("Playlist item with ID $item_id not found."); // Log error for missing items
         }
     }
 
