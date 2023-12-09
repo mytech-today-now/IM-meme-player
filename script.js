@@ -40,56 +40,57 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('prevButton').addEventListener('click', () => navigateFiles(-1));
     document.getElementById('nextButton').addEventListener('click', () => navigateFiles(1));
 
-// Function to fetch media with optional filters (tags, categories, search query)
-async function fetchMedia(filters = {}) {
-    const params = new URLSearchParams({ action, ...filters });
-    const response = await fetch(ajaxurl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString()
+    // Function to fetch media with optional filters (tags, categories, search query)
+    async function fetchMedia(filters = {}) {
+        const params = new URLSearchParams({ action, ...filters });
+        const response = await fetch(ajaxurl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: params.toString()
+        });
+
+        if (!response.ok) {
+            console.error('Network response was not ok');
+            return [];
+        }
+
+        const jsonData = await response.json();
+        if (jsonData.error) {
+            console.error(jsonData.error);
+            return [];
+        }
+
+        return shuffleArray(Object.values(jsonData));
+    }
+
+    // Function to update media display based on filters
+    async function updateMediaDisplay(filters) {
+        files = await fetchMedia(filters);
+        displayFilesSequentially(files, 0);
+    }
+
+    // Event listeners for filter options (tags, categories, search)
+    document.getElementById('tagFilter').addEventListener('change', (event) => {
+        updateMediaDisplay({ tag: event.target.value });
     });
 
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
+    document.getElementById('categoryFilter').addEventListener('change', (event) => {
+        updateMediaDisplay({ category: event.target.value });
+    });
 
-    const jsonData = await response.json();
-    if (jsonData.error) {
-        console.error(jsonData.error);
-        return [];
-    }
+    document.getElementById('searchForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const query = document.getElementById('searchInput').value;
+        updateMediaDisplay({ search: query });
+    });
 
-    return shuffleArray(Object.values(jsonData));
-}
-
-// Function to update media display based on filters
-async function updateMediaDisplay(filters) {
-    files = await fetchMedia(filters);
-    displayFilesSequentially(files, 0);
-}
-
-// Event listeners for filter options (tags, categories, search)
-document.getElementById('tagFilter').addEventListener('change', (event) => {
-    updateMediaDisplay({ tag: event.target.value });
-});
-
-document.getElementById('categoryFilter').addEventListener('change', (event) => {
-    updateMediaDisplay({ category: event.target.value });
-});
-
-document.getElementById('searchForm').addEventListener('submit', (event) => {
-    event.preventDefault();
-    const query = document.getElementById('searchInput').value;
-    updateMediaDisplay({ search: query });
-});
-
-// Initial fetch and display
-fetchMedia().then(fetchedFiles => {
-    files = fetchedFiles;
-    displayFilesSequentially(files, 0);
-}).catch(error => {
-    console.error("Network error:", error);
-});
+    // Initial fetch and display
+    fetchMedia().then(fetchedFiles => {
+        files = fetchedFiles;
+        displayFilesSequentially(files, 0);
+    }).catch(error => {
+        console.error("Network error:", error);
+    });
 
     // Display media files sequentially
     async function displayFilesSequentially(files, index) {
@@ -140,34 +141,7 @@ fetchMedia().then(fetchedFiles => {
 
             handleVideoPlayback(videoElement, files, index);
         }
-    }
-
-    // Fetch the list of files using WordPress AJAX
-    fetch(ajaxurl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `action=${action}`
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(jsonData => {
-        if (jsonData.error) {
-            console.error(jsonData.error);
-            return;
-        }
-
-        files = shuffleArray(Object.values(jsonData)); // Set and shuffle the files array
-        displayFilesSequentially(files, 0); // Start with the first file
-    })
-    .catch(error => {
-        console.error("Network error:", error);
-    });
+    };
 });
 
 // Folder Selector for Meme Player
