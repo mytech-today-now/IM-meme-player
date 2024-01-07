@@ -173,7 +173,7 @@ function meme_player_general_settings_page() {
 }
 
 // Function to retrieve media items based on tags, categories, or search terms
-function get_media_items($tag = '', $category = '', $search = '') {
+function imp_get_media_items($tag = '', $category = '', $search = '') {
     global $wpdb;
     $query = "SELECT * FROM {$wpdb->prefix}media WHERE 1=1";
 
