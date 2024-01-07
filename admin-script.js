@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
     // Add event listener to the 'Add Media' button
-    $('#mytech-open-media-library').click(function(e) {
+    $('#meme-open-media-library').click(function(e) {
         e.preventDefault();
 
         var file_frame; // Keep the file frame to reuse if already open
@@ -26,7 +26,7 @@ jQuery(document).ready(function($) {
             var attachment = file_frame.state().get('selection').first().toJSON();
 
             // Assuming you're passing the URL of the attachment to an input field
-            $('#mytech_media_url').val(attachment.url);  // Update the input field with the media URL
+            $('#meme_media_url').val(attachment.url);  // Update the input field with the media URL
 
             // Optionally, if you want to display the selected image as a preview
             // $('#image-preview').attr('src', attachment.url); 
