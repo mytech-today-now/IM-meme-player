@@ -4,16 +4,16 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Function to add a menu for our playlist manager in the admin dashboard
+// Function to add a menu for the playlist manager in the admin dashboard
 function meme_add_playlist_manager_menu() {
     add_menu_page(
         __('Playlist Manager', 'meme-domain'),   // Page title
         __('Playlists', 'meme-domain'),         // Menu title
-        'manage_options',                         // Capability required to see this option
+        'manage_options',                       // Capability required to see this option
         'meme-playlist-manager',                // Unique menu slug
         'meme_playlist_manager_page_content',   // Function to output the content for this page
-        'dashicons-playlist-audio',               // Icon for the menu
-        6                                        // Position in the menu (6 is just below Posts)
+        'dashicons-playlist-audio',             // Icon for the menu
+        6                                      // Position in the menu (6 is just below Posts)
     );
 }
 
@@ -29,47 +29,55 @@ function meme_playlist_manager_page_content() {
         meme_handle_playlist_form_submission();
     }
 
-    ?>
-    <div class="wrap">
-        <h1><?php _e('Playlist Manager', 'meme-domain'); ?></h1>
-        <form method="post" action="<?php echo esc_html(admin_url('admin-post.php')); ?>">
-            <input type="hidden" name="action" value="meme_save_playlist">
-            <?php
-            // Security field
-            wp_nonce_field('meme_save_playlist_action', 'meme_save_playlist_nonce');
-            ?>
-            <input type="text" name="playlist_title" placeholder="<?php _e('Playlist Title', 'meme-domain'); ?>" required>
-            <input type="submit" class="button button-primary" value="<?php _e('Add New Playlist', 'meme-domain'); ?>">
-        </form>
-        <!-- You can further add list or edit forms here -->
-    </div>
-    <?php
+    // Displaying existing playlists with options for editing and reordering
+    echo '<div class="wrap">';
+    echo '<h1>' . __('Playlist Manager', 'meme-domain') . '</h1>';
+
+    $playlists = get_posts(array('post_type' => 'playlist', 'numberposts' => -1));
+    foreach ($playlists as $playlist) {
+        echo '<div class="playlist" id="playlist-' . esc_attr($playlist->ID) . '">';
+        echo '<h3>' . esc_html($playlist->post_title) . '</h3>';
+
+        // Retrieve and display playlist items here
+        // You will need to fetch and display the actual playlist items here
+        // and ensure they have proper data attributes for handling reordering.
+
+        echo '</div>'; // .playlist
+    }
+
+    // Add New Playlist Form
+    echo '<h2>' . __('Add New Playlist', 'meme-domain') . '</h2>';
+    echo '<form method="post" action="">';
+    wp_nonce_field('meme_save_playlist_action', 'meme_save_playlist_nonce');
+    echo '<input type="text" name="playlist_title" placeholder="' . __('Playlist Title', 'meme-domain') . '" required>';
+    echo '<input type="submit" class="button button-primary" value="' . __('Add New Playlist', 'meme-domain') . '">';
+    echo '</form>';
+
+    echo '</div>'; // .wrap
 }
 
-// Handle the form submission
+// Handle the form submission for playlists
 function meme_handle_playlist_form_submission() {
-    // Check nonce for security
     $nonce_value = isset($_POST['meme_save_playlist_nonce']) ? $_POST['meme_save_playlist_nonce'] : '';
     if (!wp_verify_nonce($nonce_value, 'meme_save_playlist_action')) {
         return;
     }
 
-    // Process form: here we just handle adding a new playlist for simplicity
     if (isset($_POST['playlist_title'])) {
         $new_title = sanitize_text_field($_POST['playlist_title']);
         
-        // Insert the new playlist as a post of type 'playlist'
         $post_id = wp_insert_post(array(
             'post_title'    => $new_title,
             'post_status'   => 'publish',
             'post_type'     => 'playlist'
         ));
 
-        // Handle error or success feedback
         if ($post_id) {
-            // Admin notice or redirect on success
+            // Provide feedback or redirection on success
+            // Consider using admin notices or redirection to the edit page
         } else {
-            // Admin notice or handling on failure
+            // Provide feedback on failure
+            // Consider logging the error or showing an admin notice
         }
     }
 }
