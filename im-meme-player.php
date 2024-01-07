@@ -10,8 +10,11 @@ Author: myTech.Today
 defined('ABSPATH') || exit;
 
 // Including other PHP files
+include_once plugin_dir_path(__FILE__) . 'admin-menu.php';
+include_once plugin_dir_path(__FILE__) . 'admin-page.php';
 include_once plugin_dir_path(__FILE__) . 'config.php';
 include_once plugin_dir_path(__FILE__) . 'filelist.php';
+include_once plugin_dir_path(__FILE__) . 'functions.php';
 include_once plugin_dir_path(__FILE__) . 'shortcode.php';
 include_once plugin_dir_path(__FILE__) . 'playlist-cpt.php';
 include_once plugin_dir_path(__FILE__) . 'playlist-manager.php';
