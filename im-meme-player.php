@@ -118,6 +118,13 @@ function meme_player_enqueue_scripts() {
     wp_enqueue_script('playlist-script', plugin_dir_url(__FILE__) . 'script.js', array('jquery'), null, true);
 }
 
+/**
+ * Enqueues the media uploader scripts.
+ */
+function mytech_enqueue_media_uploader() {
+    wp_enqueue_media();
+}
+
 // Add the settings page to the MemePlayer menu
 function meme_player_admin_menu() {
     add_menu_page('MemePlayer', 'MemePlayer', 'manage_options', 'meme-player-settings', 'meme_player_settings_page', 'dashicons-admin-generic');
@@ -192,6 +199,7 @@ function register_playlist_post_type() {
 
 add_action('wp_enqueue_scripts', 'meme_player_enqueue_scripts');
 add_action('init', 'register_playlist_post_type');
+add_action('admin_enqueue_scripts', 'mytech_enqueue_media_uploader');
 
 // Add Folder2Post menu
 function folder2post_menu() {
