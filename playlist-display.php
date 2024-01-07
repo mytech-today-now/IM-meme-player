@@ -23,6 +23,7 @@ function display_playlist($playlist_id) {
     // Check if the playlist has items
     if (empty($playlist_items)) {
         echo "No items in this playlist.";
+        ConsoleLogger::error("No items in playlist $playlist->post_title ($playlist_id)"); // Log error for debugging
         return;
     }
 
