@@ -6,7 +6,6 @@ Version: 0.0.2
 Author: mytechtoday@protonmail.com
 GitHub: @mytech-today-now/IM-meme-player/
 */
-*/
 
 // Prevent direct file access
 defined('ABSPATH') || exit;
