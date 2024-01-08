@@ -80,11 +80,11 @@ function meme_playlist_manager_page_content() {
 
 // Output the content for the options page
 function meme_player_options_page_content() {
+
     // Verify user permissions
     if (!current_user_can('manage_options')) {
-        return;
+        wp_die(__('You do not have sufficient permissions to manage options.', 'meme-domain'));
     }
-
     ?>
     <div class="wrap">
         <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
