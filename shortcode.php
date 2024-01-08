@@ -8,40 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Retrieves playlist items.
- *
- * @param int|string $playlist_id The ID or name of the playlist.
- * @return array The playlist items.
- */
-function get_playlist_items($playlist_id) {
-    // Retrieve the playlist post
-    $playlist_post = get_post($playlist_id);
 
-    // Error handling for non-existent posts
-    if (!$playlist_post) {
-        ConsoleLogger::error("Playlist post with ID $playlist_id not found.");
-        return array(); // Return an empty array if the post doesn't exist
-    } else {
-        // Assuming the playlist items are stored as JSON in post_content
-        ConsoleLogger::log("Playlist post with ID $playlist_id found.");
-    }
-
-    // Assuming the playlist items are stored as JSON in post_content
-    $items = json_decode($playlist_post->post_content, true);
-
-    // Error handling for malformed JSON
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        ConsoleLogger::error("Malformed JSON in playlist post with ID $playlist_id.");
-        return array(); // Return an empty array if JSON is malformed
-    } else {
-        // Assuming the playlist items are stored as JSON in post_content
-        ConsoleLogger::log("JSON decoded successfully for playlist post with ID $playlist_id.");
-    }
-
-    return is_array($items) ? $items : array();
-    ConsoleLogger::log("Playlist items retrieved successfully for playlist post with ID $playlist_id.");
-}
 
 /**
  * Shortcode to display meme player with a specific playlist.
