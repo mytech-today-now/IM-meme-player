@@ -10,6 +10,38 @@ GitHub: @mytech-today-now/IM-meme-player/
 // Prevent direct file access
 defined('ABSPATH') || exit;
 
+/**
+ * Class ConsoleLogger
+ * Mimics JavaScript's console.log and console.error functionality in PHP.
+ */
+class ConsoleLogger {
+
+    /**
+     * Logs a message as an informational log.
+     * 
+     * @param mixed $message The message to log.
+     */
+    public static function log($message) {
+        if (is_array($message) || is_object($message)) {
+            $message = print_r($message, true);
+        }
+        ConsoleLogger::error("Info: " . $message);
+    }
+
+    /**
+     * Logs a message as an error.
+     * 
+     * @param mixed $message The message to log.
+     */
+    public static function error($message) {
+        if (is_array($message) || is_object($message)) {
+            $message = print_r($message, true);
+        }
+        ConsoleLogger::error("Error: " . $message);
+    }
+}
+
+
 // Including other PHP files
 include_once plugin_dir_path(__FILE__) . 'admin-menu.php';
 include_once plugin_dir_path(__FILE__) . 'admin-page.php';

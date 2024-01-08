@@ -117,35 +117,6 @@ function reorder_playlist_items($playlist_id, $ordered_ids) {
     }
 }
 
-/**
- * Class ConsoleLogger
- * Mimics JavaScript's console.log and console.error functionality in PHP.
- */
-class ConsoleLogger {
 
-    /**
-     * Logs a message as an informational log.
-     * 
-     * @param mixed $message The message to log.
-     */
-    public static function log($message) {
-        if (is_array($message) || is_object($message)) {
-            $message = print_r($message, true);
-        }
-        ConsoleLogger::error("Info: " . $message);
-    }
-
-    /**
-     * Logs a message as an error.
-     * 
-     * @param mixed $message The message to log.
-     */
-    public static function error($message) {
-        if (is_array($message) || is_object($message)) {
-            $message = print_r($message, true);
-        }
-        ConsoleLogger::error("Error: " . $message);
-    }
-}
 
 ?>
