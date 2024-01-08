@@ -77,5 +77,49 @@ function meme_playlist_manager_page_content() {
     echo '</div>'; // Close .wrap
 }
 
+
+// Output the content for the options page
+function meme_player_options_page_content() {
+    // Verify user permissions
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+
+    ?>
+    <div class="wrap">
+        <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+        <form method="post" action="options.php">
+            <?php settings_fields('meme-player-settings'); ?>
+            <?php do_settings_sections('meme-player-settings'); ?>
+
+            <h2><?php _e('Allowed Origins for Meme Player', 'meme-domain'); ?></h2>
+            <textarea name="meme_player_allowed_origins" rows="5" cols="50"><?php echo esc_textarea(implode("\n", get_option('meme_player_allowed_origins', [get_site_url()]))); ?></textarea>
+            <p><?php _e('Enter each allowed origin on a new line. https://domain.tdl', 'meme-domain'); ?></p>
+
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <?php
+}
+
+// Register and define the settings
+function meme_register_settings() {
+    register_setting(
+        'meme-player-settings', // Option group
+        'meme_player_allowed_origins', // Option name
+        'meme_sanitize_allowed_origins' // Sanitization callback
+    );
+}
+add_action('admin_init', 'meme_register_settings');
+
+// Sanitize the input from the text area for allowed origins
+function meme_sanitize_allowed_origins($input) {
+    $output = explode("\n", $input);
+    $output = array_map('sanitize_text_field', $output);
+    $output = array_filter($output);
+    return $output;
+}
+
+
 // Hook into admin_menu to add the menu page
 add_action('admin_menu', 'meme_add_playlist_manager_menu');
