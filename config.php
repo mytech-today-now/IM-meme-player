@@ -12,21 +12,28 @@ $allowed_origins = get_option('meme_player_allowed_origins', [get_site_url()]);
 // Check the Origin header of the incoming request
 $request_origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-if (in_array($request_origin, $allowed_origins, true)) {
-    header("Access-Control-Allow-Origin: $request_origin");
+// Only proceed with CORS handling if an Origin header is present
+if (!empty($request_origin)) {
+    if (in_array($request_origin, $allowed_origins, true)) {
+        header("Access-Control-Allow-Origin: $request_origin");
+        header("Access-Control-Allow-Methods: GET");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+    } else {
+        // If the origin is not allowed, log the violation and exit early
+        error_log("CORS policy violation: Origin $request_origin is not allowed."); // Use error_log or your custom logger
+        ConsoleLogger::error("CORS policy violation: Origin $request_origin is not allowed."); // Log error for debugging
+        exit('CORS policy violation.');
+    }
 } else {
-    // If the origin is not allowed, exit early
-    ConsoleLogger::error("CORS policy violation.");
-    exit('CORS policy violation.');
+    // If no Origin header is present, you might want to log this occurrence or handle it appropriately
+    ConsoleLogger::error("No HTTP_ORIGIN header present in the request."); // Log error for debugging
+    error_log("No HTTP_ORIGIN header present in the request."); // Use error_log or your custom logger
+    // You might choose to exit or continue processing depending on your application's needs
+    // For instance, you could exit or continue without setting the CORS headers
 }
-
-header("Access-Control-Allow-Methods: GET");
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
-header('Content-Type: application/json');
 
 // Exit early if it's an OPTIONS request (pre-flight)
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    ConsoleLogger::error("REQUEST_METHOD: Exit early if it's an OPTIONS request (pre-flight)");
     exit;
 }
 
