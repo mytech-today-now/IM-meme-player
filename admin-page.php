@@ -1,5 +1,5 @@
 <?php
-// Version: 0.0.3
+// Version: 0.0.4
 
 // Assume this is part of admin-page.php or the respective admin interface file for your plugin
 

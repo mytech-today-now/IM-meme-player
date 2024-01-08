@@ -1,3 +1,19 @@
+# Version 0.0.4
+# Date: 2023-01-07
+# Author: mytechtoday@protonmail.com
+# Description: Docker Compose file for local development
+# Usage: docker-compose -f compose-dev.yaml up -d
+#        docker-compose -f compose-dev.yaml down
+#        docker-compose -f compose-dev.yaml logs -f
+#        docker-compose -f compose-dev.yaml exec db bash
+#        docker-compose -f compose-dev.yaml exec wordpress bash
+#        docker-compose -f compose-dev.yaml exec db mysql -u root -p
+#        docker-compose -f compose-dev.yaml exec db mysql -u wordpress -pwordpress
+#        docker-compose -f compose-dev.yaml exec db mysql -u wordpress -pwordpress wordpress
+#       docker-compose -f compose-dev.yaml exec db mysql -u wordpress -pwordpress wordpress -e "SELECT * FROM wp_options WHERE option_name = 'siteurl' OR option_name = 'home';"
+#       docker-compose -f compose-dev.yaml exec db mysql -u wordpress -pwordpress wordpress -e "UPDATE wp_options SET option_value = 'http://localhost:8000' WHERE option_name = 'siteurl' OR option_name = 'home';"
+#      docker-compose -f compose-dev.yaml exec db mysql -u wordpress -pwordpress wordpress -e "SELECT * FROM wp_options WHERE option_name = 'siteurl' OR option_name = 'home';"
+
 version: '3.8'
 
 services:

@@ -1,3 +1,5 @@
+# Version: 0.0.4
+
 # Use the official WordPress image as a parent image
 FROM wordpress:latest
 

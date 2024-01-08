@@ -1,3 +1,7 @@
+/* 
+Version: 0.0.4 
+*/
+
 document.addEventListener('DOMContentLoaded', function() {
     // Constants
     const ajaxurl = my_meme_player_ajax.ajax_url; // WordPress AJAX URL for handling AJAX requests
