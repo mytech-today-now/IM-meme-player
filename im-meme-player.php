@@ -48,7 +48,19 @@ class ConsoleLogger {
     }
 }
 
+// Define the function to run upon plugin activation
+function meme_set_default_allowed_origins() {
+    // Fetch current allowed origins
+    $allowed_origins = get_option('meme_player_allowed_origins');
 
+    // Set default allowed origins if not set
+    if (empty($allowed_origins)) {
+        update_option('meme_player_allowed_origins', [get_site_url()]);
+    }
+}
+
+// Register the above function to run on plugin activation
+register_activation_hook(__FILE__, 'meme_set_default_allowed_origins');
 
 // Including other PHP files
 include_once plugin_dir_path(__FILE__) . 'admin-menu.php';
