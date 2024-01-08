@@ -1,4 +1,6 @@
 <?php
+// Version: 0.0.3
+
 // playlist-cpt.php
 
 /**

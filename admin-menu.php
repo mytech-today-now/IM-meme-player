@@ -1,4 +1,6 @@
 <?php
+// Version: 0.0.3
+
 // Ensure this file is being included within the WordPress framework
 if (!defined('ABSPATH')) {
     exit;

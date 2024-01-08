@@ -1,4 +1,6 @@
 <?php
+// Version: 0.0.3
+
 // playlist-helpers.php
 
 // =====================
@@ -14,15 +16,7 @@
 // $playlist_id = 1; // Example playlist ID
 // $items = get_playlist_items($playlist_id, 'funny', 'video');
 // Display or process $items as needed
-// =====================
-// ConsoleLogger class
-// =====================
-// Mimics JavaScript's console.log and console.error functionality in PHP.
-// =====================
-// Example usage
-// =====================
-// ConsoleLogger::log('This is an informational message.');
-// ConsoleLogger::error('This is an error message.');
+
 
 
 // Prevent direct file access

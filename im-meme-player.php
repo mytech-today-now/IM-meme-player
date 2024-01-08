@@ -2,7 +2,7 @@
 /*
 Plugin Name: IM Meme Player
 Description: A multimedia meme player plugin for WordPress.
-Version: 0.0.2
+Version: 0.0.3
 Author: mytechtoday@protonmail.com
 GitHub: @mytech-today-now/IM-meme-player/
 */
@@ -10,10 +10,15 @@ GitHub: @mytech-today-now/IM-meme-player/
 // Prevent direct file access
 defined('ABSPATH') || exit;
 
-/**
- * Class ConsoleLogger
- * Mimics JavaScript's console.log and console.error functionality in PHP.
- */
+// =====================
+// ConsoleLogger class
+// =====================
+// Mimics JavaScript's console.log and console.error functionality in PHP.
+// =====================
+// Example usage
+// =====================
+// ConsoleLogger::log('This is an informational message.');
+// ConsoleLogger::error('This is an error message.');
 class ConsoleLogger {
 
     /**
@@ -25,7 +30,8 @@ class ConsoleLogger {
         if (is_array($message) || is_object($message)) {
             $message = print_r($message, true);
         }
-        ConsoleLogger::error("Info: " . $message);
+        // Log the message as an informational log
+        error_log("Info: " . $message);
     }
 
     /**
@@ -37,9 +43,11 @@ class ConsoleLogger {
         if (is_array($message) || is_object($message)) {
             $message = print_r($message, true);
         }
-        ConsoleLogger::error("Error: " . $message);
+        // Log the message as an error
+        error_log("Error: " . $message);
     }
 }
+
 
 
 // Including other PHP files

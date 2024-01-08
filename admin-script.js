@@ -1,3 +1,5 @@
+// Version: 0.0.3
+
 jQuery(document).ready(function($) {
     // Initialize sortable playlists for drag-and-drop functionality
     $('.playlist').sortable({
