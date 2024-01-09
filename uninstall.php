@@ -1,5 +1,5 @@
 <?php
-// Version: 0.0.4
+// Version: 0.0.5
 
 // If uninstall not called from WordPress, exit
 if (!defined('WP_UNINSTALL_PLUGIN')) {
