@@ -80,6 +80,37 @@ function Meme_media_admin_page() {
     <?php
 }
 
+function meme_player_admin_settings_page() {
+    // Check user permissions
+    if (!current_user_can('manage_options')) {
+        wp_die(__('You do not have sufficient permissions to access this page.', 'meme-domain'));
+    }
+
+    // Check if the form has been submitted
+    if (isset($_POST['meme_player_uninstall_option'])) {
+        // Update the uninstall option
+        $uninstall_option = intval($_POST['meme_player_uninstall_option']);
+        update_option('meme_player_uninstall_option', $uninstall_option);
+    }
+
+    // Retrieve the current setting value
+    $current_option = get_option('meme_player_uninstall_option', 1); // Default to option 1
+    ?>
+    <div class="wrap">
+        <h1>Meme Player Uninstall Options</h1>
+        <form method="post" action="">
+            <label for="uninstall_option">Select Uninstall Option:</label>
+            <select name="meme_player_uninstall_option" id="uninstall_option">
+                <option value="1" <?php echo $current_option == 1 ? 'selected' : ''; ?>>Delete All Data</option>
+                <option value="2" <?php echo $current_option == 2 ? 'selected' : ''; ?>>Keep Data</option>
+                <option value="3" <?php echo $current_option == 3 ? 'selected' : ''; ?>>Reset Changes</option>
+            </select>
+            <?php submit_button('Save Changes'); ?>
+        </form>
+    </div>
+    <?php
+}
+
 // Enqueue necessary scripts and styles
 function Meme_enqueue_media_uploader() {
     wp_enqueue_media();
