@@ -73,6 +73,9 @@ include_once plugin_dir_path(__FILE__) . 'playlist-display.php';
 include_once plugin_dir_path(__FILE__) . 'playlist-helpers.php';
 include_once plugin_dir_path(__FILE__) . 'shortcode.php';
 
+// Handle CORS via function
+handle_cors();
+
 /**
  * Retrieves a playlist from the database.
  * 
