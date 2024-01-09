@@ -35,7 +35,7 @@ services:
   wordpress:
     depends_on:
       - db
-    image: wordpress:6.4-php7.4-apache
+    image: 6.4.2-php8.1-apache
     volumes:
       - ./wp-content:/var/www/html/wp-content
       - ./plugins/im-meme-player:/var/www/html/wp-content/plugins/im-meme-player
