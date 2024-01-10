@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme Player Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>IM Meme Player</h1>
+        </header>
+        <main>
+            <section aria-label="Meme Player">
+                <div id="mediaBoxElement" role="region" aria-live="polite">
+                    <button id="prevButton" aria-label="Previous">&#8678;</button>
+                    <div id="mediaBox" role="img" aria-label="Meme content"></div>
+                    <button id="nextButton" aria-label="Next">&#8680;</button>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2023 Meme Player by myTech.Today</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,5 +1,9 @@
+# Version: 0.0.7
+
 # Ignore everything in the meme directory
 meme/*
+wp-content/
+plugins/
 
 # But not the meme directory itself
 !meme/.gitkeep

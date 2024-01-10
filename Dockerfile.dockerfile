@@ -1,4 +1,4 @@
-# Version: 0.0.6
+# Version: 0.0.7
 
 # Use the official WordPress image as a parent image
 FROM wordpressdevelop/phpunit

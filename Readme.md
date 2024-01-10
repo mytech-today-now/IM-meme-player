@@ -1,4 +1,4 @@
-# IM Meme Player v.0.0.6
+# IM Meme Player v.0.0.7
 
 ## Introduction
 IM Meme Player is an innovative WordPress plugin that brings a unique and engaging experience to WordPress sites by integrating multimedia meme content. Designed for ease of use and flexibility, it allows site owners and visitors to interact with a wide range of meme-based media.
@@ -10,16 +10,17 @@ IM Meme Player is an innovative WordPress plugin that brings a unique and engagi
 - **Customizable Settings**: Offers a range of settings to tailor the media display to your site's design and user preferences.
 
 ## Installation
-1. Download a .zip of the plugin from the [GitHub repository](https://github.com/mytech-today-now/IM-meme-player).
+1. Download a .zip of the plugin from the [GitHub repository](https://github.com/mytech-today-now/IM-meme-player/builds) builds folder.
 2. In your WordPress dashboard, go to 'Plugins > Add New'.
 3. Click 'Upload Plugin' and choose the downloaded zip file.
 4. Activate the plugin after installation.
 
 ## Docker
-1. Install [Docker](https://#) on the computer.
+1. Install [Docker](https://www.docker.com/products/personal/) on the computer.
 2. Open a Terminal in the folder of the plugin.
 3. Run the following command `docker-compose -f compose-dev.yaml up -d`
-4. Next, run the following command ``
+4. Open a web browser, and copy and paste this `http://localhost:8080` into the address bar and press enter.
+5. If the browser comes back with `Destination Unreachable`, see solutions [here](https://locall.host/)
 
 ## Usage
 Embed the meme player in your posts or pages using the `[meme_player]` shortcode. Customize its appearance and behavior through the 'Settings > Meme Player' section in the WordPress admin panel.
