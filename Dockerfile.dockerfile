@@ -1,7 +1,7 @@
-# Version: 0.0.5
+# Version: 0.0.6
 
 # Use the official WordPress image as a parent image
-FROM wordpress:latest
+FROM wordpressdevelop/phpunit
 
 # Install necessary PHP extensions
 RUN docker-php-ext-install mysqli pdo pdo_mysql

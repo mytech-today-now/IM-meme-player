@@ -1,4 +1,4 @@
-# Version 0.0.5
+# Version 0.0.6
 # Date: 2023-01-07
 # Author: mytechtoday@protonmail.com
 # Description: Docker Compose file for local development
@@ -32,6 +32,7 @@ services:
       - wordpress:/var/www/html
       - ./wp-content:/var/www/html/wp-content
       - ./plugins/im-meme-player:/var/www/html/wp-content/plugins/im-meme-player
+      - ./init-script.sh:/usr/local/bin/init-script.sh
 
   db:
     image: mysql:8.0
