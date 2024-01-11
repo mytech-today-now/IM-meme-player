@@ -63,15 +63,16 @@ function meme_set_default_allowed_origins() {
 register_activation_hook(__FILE__, 'meme_set_default_allowed_origins');
 
 // Including other PHP files
-include_once plugin_dir_path(__FILE__) . 'admin-menu.php';
-include_once plugin_dir_path(__FILE__) . 'admin-page.php';
-include_once plugin_dir_path(__FILE__) . 'config.php';
+include_once plugin_dir_path(__FILE__) . 'im-meme-player-admin-menu.php';
+include_once plugin_dir_path(__FILE__) . 'im-meme-player-admin-page.php';
+include_once plugin_dir_path(__FILE__) . 'im-meme-player-config.php';
 include_once plugin_dir_path(__FILE__) . 'filelist.php';
-include_once plugin_dir_path(__FILE__) . 'functions.php';
-include_once plugin_dir_path(__FILE__) . 'playlist-cpt.php';
-include_once plugin_dir_path(__FILE__) . 'playlist-display.php';
-include_once plugin_dir_path(__FILE__) . 'playlist-helpers.php';
-include_once plugin_dir_path(__FILE__) . 'shortcode.php';
+include_once plugin_dir_path(__FILE__) . 'im-meme-player-functions.php';
+include_once plugin_dir_path(__FILE__) . 'im-meme-player-playlist-cpt.php';
+include_once plugin_dir_path(__FILE__) . 'im-meme-player-playlist-display.php';
+include_once plugin_dir_path(__FILE__) . 'im-meme-player-playlist-helpers.php';
+include_once plugin_dir_path(__FILE__) . 'im-meme-player-shortcode.php';
+include_once plugin_dir_path(__FILE__) . 'im-meme-player-uninstall.php';
 
 // Handle CORS via function
 handle_cors();
