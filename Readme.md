@@ -10,7 +10,7 @@ IM Meme Player is an innovative WordPress plugin that brings a unique and engagi
 - **Customizable Settings**: Offers a range of settings to tailor the media display to your site's design and user preferences.
 
 ## Installation
-1. Download a .zip of the plugin from the [GitHub repository](https://github.com/mytech-today-now/IM-meme-player/builds) builds folder.
+1. Download a .zip of the plugin from the [GitHub repository builds](https://github.com/mytech-today-now/IM-meme-player/tree/main/builds) folder.
 2. In your WordPress dashboard, go to 'Plugins > Add New'.
 3. Click 'Upload Plugin' and choose the downloaded zip file.
 4. Activate the plugin after installation.
