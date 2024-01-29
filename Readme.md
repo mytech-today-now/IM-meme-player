@@ -1,48 +1,54 @@
-# IM Meme Player v.0.0.7
+# IM Meme Player v.0.0.7.1
 
 ## Introduction
-IM Meme Player is an innovative WordPress plugin that brings a unique and engaging experience to WordPress sites by integrating multimedia meme content. Designed for ease of use and flexibility, it allows site owners and visitors to interact with a wide range of meme-based media.
+Welcome to IM Meme Player, a cutting-edge WordPress plugin designed to transform your website with dynamic meme playback. This plugin mimics popular social media styles like Snapchat and TikTok, providing a familiar and engaging user interface.
 
-## Features
-- **Dynamic Content Loading**: Automatically loads and updates meme content, ensuring a fresh and engaging user experience.
-- **Interactive Media Controls**: Users can easily navigate through meme content with intuitive media controls.
-- **Responsive Design**: Optimized for various screen sizes, ensuring a seamless experience on desktops, tablets, and mobile devices.
-- **Customizable Settings**: Offers a range of settings to tailor the media display to your site's design and user preferences.
+## Key Features
+- **Dynamic Meme Playback**: Effortlessly integrates a variety of meme formats, creating an interactive and constantly updated stream of content.
+- **Nested Playback Capability**: Unique feature allowing playbacks to contain additional meme playbacks, offering a multi-layered viewing experience.
+- **User-Friendly Admin Panel**: Configure playback settings and features easily through the WordPress admin interface.
 
-## Installation
-1. Download a .zip of the plugin from the [GitHub repository](https://github.com/mytech-today-now/IM-meme-player/builds) builds folder.
-2. In your WordPress dashboard, go to 'Plugins > Add New'.
-3. Click 'Upload Plugin' and choose the downloaded zip file.
-4. Activate the plugin after installation.
+## Installation Guide
+1. Download the plugin zip file from the [GitHub repository](https://github.com/mytech-today-now/IM-meme-player/builds).
+2. Navigate to 'Plugins > Add New' in your WordPress dashboard.
+3. Select 'Upload Plugin' and upload the downloaded file.
+4. Activate the plugin once installed.
 
-## Docker
-1. Install [Docker](https://www.docker.com/products/personal/) on the computer.
-2. Open a Terminal in the folder of the plugin.
-3. Run the following command `docker-compose -f compose-dev.yaml up -d`
-4. Open a web browser, and copy and paste this `http://localhost:8080` into the address bar and press enter.
-5. If the browser comes back with `Destination Unreachable`, see solutions [here](https://locall.host/)
+## Docker Quickstart
+1. Ensure [Docker](https://www.docker.com/products/personal/) is installed.
+2. Open a terminal in the plugin directory.
+3. Execute: `docker-compose -f compose-dev.yaml up -d`
+4. Access the local server at `http://localhost:8080`. Troubleshoot with [this guide](https://locall.host/) if needed.
 
-## Usage
-Embed the meme player in your posts or pages using the `[meme_player]` shortcode. Customize its appearance and behavior through the 'Settings > Meme Player' section in the WordPress admin panel.
+## Usage Instructions
+Embed memes using `[meme_player]` shortcode in posts or pages. Adjust settings in the WordPress admin panel under 'Settings > Meme Player'.
 
 ## System Requirements
 - WordPress 5.0 or higher.
 - PHP 7.2 or above.
 
 ## Getting Started
-After installation, visit the 'Settings > Meme Player' section to configure the plugin. Insert the `[meme_player]` shortcode into your posts or pages to display the meme player.
+Configure the plugin under 'Settings > Meme Player' in the WordPress admin area. Then, use the `[meme_player]` shortcode to display the meme player on your site.
 
-## Support and Contributions
-For support, feature requests, or bug reporting, please visit our [GitHub Issues page](https://github.com/mytech-today-now/IM-meme-player/issues). Contributions to the project are welcome!
+## Support and Community
+For support, feature suggestions, or bug reports, visit our [GitHub Issues page](https://github.com/mytech-today-now/IM-meme-player/issues). We welcome contributions to enhance this project.
 
 ## Acknowledgements
-A heartfelt thank you to all contributors and supporters who make the IM Meme Player project possible.
+Special thanks to the entire community of developers, testers, and users for their invaluable contributions.
 
 ## Licensing
-This plugin is licensed under GPL v2 or later.
+IM Meme Player is open-sourced under GPL v2 or later.
 
-## About the Developer
-For inquiries, contact us at mytechtoday@protonmail.com.
+## Contact
+For further inquiries, reach us at mytechtoday@protonmail.com.
 
-## Stay Updated
-Keep up with the latest updates and versions by visiting our [GitHub repository](https://github.com/mytech-today-now/IM-meme-player).
+## Stay Informed
+Follow the latest updates and releases on our [GitHub repository](https://github.com/mytech-today-now/IM-meme-player).
+
+## Version History
+- **v.0.0.7.1** (Current): Installation enabled; requires code refinement for optimal functionality.
+- **v.0.0.7.0**: Enhanced admin settings interface; minor bug fixes.
+- **v.0.0.6.3**: Improved responsive design for mobile devices.
+- **v.0.0.6.2**: Added nested playback feature.
+- **v.0.0.6.1**: Stability improvements and performance optimizations.
+- **v.0.0.6.0**: Initial release with basic meme playback functionality.

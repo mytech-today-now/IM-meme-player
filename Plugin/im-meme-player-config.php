@@ -1,5 +1,5 @@
 <?php
-// Version: 0.0.7
+// Version: 0.0.7.1
 
 // Prevent direct file access
 if (!defined('ABSPATH')) {

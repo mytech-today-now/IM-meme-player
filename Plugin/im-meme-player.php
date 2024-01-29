@@ -2,7 +2,7 @@
 /*
 Plugin Name: IM Meme Player
 Description: A multimedia meme player plugin for WordPress.
-Version: 0.0.7
+Version: 0.0.7.1
 Author: mytechtoday@protonmail.com
 GitHub: @mytech-today-now/IM-meme-player/
 */

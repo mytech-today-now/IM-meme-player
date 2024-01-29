@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Version: 0.0.7
+# Version: 0.0.7.1
 
 # Function to wait for the database to be ready
 wait_for_db() {

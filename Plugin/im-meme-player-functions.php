@@ -1,5 +1,5 @@
 <?php
-// Version: 0.0.7
+// Version: 0.0.7.1
 
 // Ensure this file is being included within the WordPress framework
 if (!defined('ABSPATH')) {
