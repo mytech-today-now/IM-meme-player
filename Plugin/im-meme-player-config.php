@@ -6,6 +6,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+function add_cors_http_header(){
+    header("Access-Control-Allow-Origin: *");
+}
+add_action('init','add_cors_http_header');
+
 function handle_cors() {
     // Fetch user-defined allowed origins or default to the server\'s root domain
     $allowed_origins = get_option('meme_player_allowed_origins', [get_site_url()]);
@@ -49,6 +54,5 @@ try {
         "status" => "error",
         "message" => "An error occurred while processing the request."
     ]);
+};
 }
-
-?>

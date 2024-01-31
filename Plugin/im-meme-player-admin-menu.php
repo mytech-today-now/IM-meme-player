@@ -8,6 +8,11 @@ if (!defined('ABSPATH')) {
 
 // Function to add a submenu for the playlist manager in the admin dashboard under Tools
 function meme_add_playlist_manager_menu() {
+    
+    // Debugging statement: Log that the function is initiated using ConsoleLogger
+    ConsoleLogger::log('meme_add_playlist_manager_menu initiated');
+
+    
     add_submenu_page(
         'tools.php', // Parent slug for Tools
         __('Playlist Manager', 'meme-domain'),   // Page title
@@ -16,12 +21,17 @@ function meme_add_playlist_manager_menu() {
         'meme-playlist-manager',                // Unique menu slug
         'meme_playlist_manager_page_content'    // Function to output the content for this page
     );
+
+    // Debugging statement: Log that the submenu is added using ConsoleLogger
+    ConsoleLogger::log('Playlist Manager submenu added under Tools');
+
 }
 
 // Output the content for the playlist manager page
 function meme_playlist_manager_page_content() {
     // Verify user permissions
     if (!current_user_can('manage_options')) {
+        ConsoleLogger::log('You do not have sufficient permissions to access this page.');
         wp_die(__('You do not have sufficient permissions to access this page.', 'meme-domain'));
     }
 
@@ -123,3 +133,6 @@ function meme_sanitize_allowed_origins($input) {
 
 // Hook into admin_menu to add the menu page
 add_action('admin_menu', 'meme_add_playlist_manager_menu');
+
+// Debugging statement: Log that the admin_menu hook is added using ConsoleLogger
+ConsoleLogger::log('admin_menu hook for meme_add_playlist_manager_menu added');
