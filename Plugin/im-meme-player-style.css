@@ -57,6 +57,11 @@ a:hover, a:focus {
   justify-content: center;
 }
 
+.playlist-thumbnail {
+  max-width: 300px; 
+  max-height: 300px;
+}
+
 /* Responsive styles for different devices and resolutions */
 /* Corrected media queries for proper ranges */
 @media only screen and (min-width: 375px) and (max-width: 667px) {

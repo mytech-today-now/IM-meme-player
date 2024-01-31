@@ -48,6 +48,13 @@ function display_playlist($playlist_id) {
         $item = get_post($item_id);
         if ($item) {
             echo '<li class="playlist-item">';
+            
+            // Display the image or video preview (thumbnail)
+            $media_url = get_the_post_thumbnail_url($item_id, 'medium');
+            if ($media_url) {
+                echo '<img src="' . esc_url($media_url) . '" alt="' . esc_attr($item->post_title) . '" class="playlist-thumbnail">';
+            }
+
             echo '<a href="' . esc_url(get_permalink($item_id)) . '">' . esc_html($item->post_title) . '</a>';
             echo '</li>';
         } else {
