@@ -3,6 +3,14 @@
 
 // playlist-display.php
 
+// Ensure this file is being included within the WordPress framework
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Include the ConsoleLogger class
+use MyTechToday\IMMemePlayer\ConsoleLogger;
+
 /**
  * Displays a playlist based on the provided playlist ID.
  * 

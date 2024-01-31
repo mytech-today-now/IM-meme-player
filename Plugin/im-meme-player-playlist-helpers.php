@@ -18,11 +18,13 @@
 // Display or process $items as needed
 
 
-
-// Prevent direct file access
+// Ensure this file is being included within the WordPress framework
 if (!defined('ABSPATH')) {
-    exit; 
+    exit;
 }
+
+// Include the ConsoleLogger class
+use MyTechToday\IMMemePlayer\ConsoleLogger;
 
 global $wpdb; // Use the global WordPress database object
 

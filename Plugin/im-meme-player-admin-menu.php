@@ -6,6 +6,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Include the ConsoleLogger class
+use MyTechToday\IMMemePlayer\ConsoleLogger;
+
 // Function to add a submenu for the playlist manager in the admin dashboard under Tools
 function meme_add_playlist_manager_menu() {
     

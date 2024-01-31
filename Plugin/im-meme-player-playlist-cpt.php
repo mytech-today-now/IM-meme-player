@@ -3,6 +3,14 @@
 
 // playlist-cpt.php
 
+// Ensure this file is being included within the WordPress framework
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Include the ConsoleLogger class
+use MyTechToday\IMMemePlayer\ConsoleLogger;
+
 /**
  * Registers a custom post type 'playlist'.
  * This function sets up the labels, arguments, and capabilities for the playlist post type.

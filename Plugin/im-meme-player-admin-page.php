@@ -1,6 +1,15 @@
 <?php
 // Version: 0.0.7.1
 
+// Ensure this file is being included within the WordPress framework
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Include the ConsoleLogger class
+use MyTechToday\IMMemePlayer\ConsoleLogger;
+
+
 // Assume this is part of admin-page.php or the respective admin interface file for your plugin
 
 // Include WordPress function for security checks

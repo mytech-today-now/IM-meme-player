@@ -7,46 +7,10 @@ Author: mytechtoday@protonmail.com
 GitHub: @mytech-today-now/IM-meme-player/
 */
 
+namespace MyTechToday\IMMemePlayer;
+
 // Prevent direct file access
 defined('ABSPATH') || exit;
-
-// =====================
-// ConsoleLogger class
-// =====================
-// Mimics JavaScript's console.log and console.error functionality in PHP.
-// =====================
-// Example usage
-// =====================
-// ConsoleLogger::log('This is an informational message.');
-// ConsoleLogger::error('This is an error message.');
-class ConsoleLogger {
-
-    /**
-     * Logs a message as an informational log.
-     * 
-     * @param mixed $message The message to log.
-     */
-    public static function log($message) {
-        if (is_array($message) || is_object($message)) {
-            $message = print_r($message, true);
-        }
-        // Log the message as an informational log
-        error_log("Info: " . $message);
-    }
-
-    /**
-     * Logs a message as an error.
-     * 
-     * @param mixed $message The message to log.
-     */
-    public static function error($message) {
-        if (is_array($message) || is_object($message)) {
-            $message = print_r($message, true);
-        }
-        // Log the message as an error
-        error_log("Error: " . $message);
-    }
-}
 
 // Define the function to run upon plugin activation
 function meme_set_default_allowed_origins() {

@@ -6,6 +6,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Include the ConsoleLogger class
+use MyTechToday\IMMemePlayer\ConsoleLogger;
+
+
 // Function to handle the AJAX request for updating playlist order
 function meme_handle_update_playlist_order() {
     // Verify nonce and user capabilities
