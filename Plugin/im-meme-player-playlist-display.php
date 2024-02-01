@@ -47,15 +47,19 @@ function display_playlist($playlist_id) {
         // Fetch details for each item, assuming it's another post
         $item = get_post($item_id);
         if ($item) {
-            echo '<li class="playlist-item">';
+            echo '<li class="playlist-item"><div class="playlist-item-title">';
             
+            echo '<a href="' . esc_url(get_permalink($item_id)) . '">' . esc_html($item->post_title) . '</a></div>';
+
+            echo '<div class="playlist-item-description">' . esc_html($item->post_content) . '</div><div class="playlist-item-media">';
+
             // Display the image or video preview (thumbnail)
             $media_url = get_the_post_thumbnail_url($item_id, 'medium');
             if ($media_url) {
-                echo '<img src="' . esc_url($media_url) . '" alt="' . esc_attr($item->post_title) . '" class="playlist-thumbnail">';
+                echo '<img src="' . esc_url($media_url) . '" alt="' . esc_attr($item->post_title) . '" class="playlist-item-thumbnail"></div>';
             }
 
-            echo '<a href="' . esc_url(get_permalink($item_id)) . '">' . esc_html($item->post_title) . '</a>';
+            
             echo '</li>';
         } else {
             ConsoleLogger::error("Playlist item with ID $item_id not found."); // Log error for missing items

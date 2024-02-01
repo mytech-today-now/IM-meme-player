@@ -57,7 +57,7 @@ a:hover, a:focus {
   justify-content: center;
 }
 
-.playlist-thumbnail {
+.playlist-item-thumbnail {
   max-width: 300px; 
   max-height: 300px;
 }
@@ -106,7 +106,7 @@ a:hover, a:focus {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.playlist-item {
+.playlist-item, .playlist-item-title, .playlist-item-description, .playlist-item-media, .playlist-item-thumbnail {
   padding: 10px;
   margin: 5px 0;
   border-bottom: 1px solid #eee;
@@ -120,5 +120,17 @@ a:hover, a:focus {
   background-color: #efefef;
   cursor: pointer; /* Enhance user interaction */
 }
+
+.playlist-item-title,  {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333; /* Removed to inherit global styles */
+  text-decoration: none; /* Removed to inherit global styles */
+  postion: relative;
+  left: 0;
+  Top: 0;
+}
+
+
 
 /* Add any additional styles as needed */
