@@ -3,6 +3,7 @@
 
 // Ensure this file is being included within the WordPress framework
 if (!defined('ABSPATH')) {
+    ConsoleLogger::error('im-meme-player-admin-page.php - ABSPATH constant not defined');
     exit;
 }
 
@@ -96,6 +97,7 @@ function meme_player_options_page_content() {
 
     // Verify user permissions
     if (!current_user_can('manage_options')) {
+        ConsoleLogger::log('You do not have sufficient permissions to manage options.');
         wp_die(__('You do not have sufficient permissions to manage options.', 'meme-domain'));
     }
     ?>
@@ -123,7 +125,9 @@ function meme_register_settings() {
         'meme_sanitize_allowed_origins' // Sanitization callback
     );
 }
+ConsoleLogger::log('meme_register_settings initiated');
 add_action('admin_init', 'meme_register_settings');
+ConsoleLogger::log('admin_init hook for meme_register_settings added');
 
 // Sanitize the input from the text area for allowed origins
 function meme_sanitize_allowed_origins($input) {
@@ -135,7 +139,6 @@ function meme_sanitize_allowed_origins($input) {
 
 
 // Hook into admin_menu to add the menu page
+ConsoleLogger::log('admin_menu hook for meme_add_playlist_manager_menu initiated');
 add_action('admin_menu', 'meme_add_playlist_manager_menu');
-
-// Debugging statement: Log that the admin_menu hook is added using ConsoleLogger
 ConsoleLogger::log('admin_menu hook for meme_add_playlist_manager_menu added');

@@ -71,3 +71,4 @@ function register_playlist_cpt() {
 
 // Hook the function into the 'init' action
 add_action('init', 'register_playlist_cpt');
+ConsoleLogger::log("Hook the function into the 'init' action."); // Log for debugging

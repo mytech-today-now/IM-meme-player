@@ -2,8 +2,11 @@
 
 namespace MyTechToday\IMMemePlayer;
 
-// Prevent direct file access
-defined('ABSPATH') || exit;
+// Ensure this file is being included within the WordPress framework
+if (!defined('ABSPATH')) {
+    ConsoleLogger::error('im-meme-player-admin-page.php - ABSPATH constant not defined');
+    exit;
+}
 
 // =====================
 // ConsoleLogger class

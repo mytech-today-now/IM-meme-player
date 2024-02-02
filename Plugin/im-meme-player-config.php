@@ -1,15 +1,21 @@
 <?php
 // Version: 0.0.7.1
 
-// Prevent direct file access
+// Ensure this file is being included within the WordPress framework
 if (!defined('ABSPATH')) {
+    ConsoleLogger::error('im-meme-player-admin-page.php - ABSPATH constant not defined');
     exit;
 }
 
 function add_cors_http_header(){
     header("Access-Control-Allow-Origin: *");
+    ConsoleLogger::log('Access-Control-Allow-Origin header definiton');
 }
+
+// Include the ConsoleLogger class
+ConsoleLogger::log('im-meme-player-config.php included');
 add_action('init','add_cors_http_header');
+ConsoleLogger::log('add_cors_http_header hook added');
 
 function handle_cors() {
     // Fetch user-defined allowed origins or default to the server\'s root domain
@@ -26,16 +32,20 @@ function handle_cors() {
             header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
         } else {
             // If the origin is not allowed, log the violation and exit early
+            ConsoleLogger::error("CORS policy violation: Origin $request_origin is not allowed.");
             error_log("CORS policy violation: Origin $request_origin is not allowed."); // Use error_log
             exit('CORS policy violation.');
         }
     } else {
         // If no Origin header is present, you might want to log this occurrence or handle it appropriately
+        ConsoleLogger::error("No HTTP_ORIGIN header present in the request.");
         error_log("No HTTP_ORIGIN header present in the request."); // Use error_log
     }
 
     // Exit early if it's an OPTIONS request (pre-flight)
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+        // Log the pre-flight request and exit
+        ConsoleLogger::log('CORS pre-flight request detected');
     exit;
 }
 

@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
         files = fetchedFiles;
         displayFilesSequentially(files, 0);
     }).catch(error => {
+        ConsoleLogger::error("Network error:", error);
         console.error("Network error:", error);
     });
 
@@ -102,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const mediaBoxElement = document.getElementById('mediaBox');
         if (!mediaBoxElement) {
+            ConsoleLogger::error("Required DOM element not found.");
             console.error("Required DOM element not found.");
             return;
         }
@@ -168,14 +170,17 @@ function updatePlaylistOrder(orderedIds) {
         success: function(response) {
             // Handle success
             if (response.success) {
+                ConsoleLogger::log('Playlist order updated successfully.');
                 console.log('Playlist order updated successfully.');
             } else {
                 // Handle failure (e.g., invalid nonce, database error)
+                ConsoleLogger::error('Failed to update playlist order:', response.error);
                 console.error('Failed to update playlist order:', response.error);
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             // Log detailed error information for debugging
+            ConsoleLogger::error('AJAX error in updating playlist order:', textStatus, errorThrown);
             console.error('AJAX error in updating playlist order:', textStatus, errorThrown);
         }
     });
@@ -208,4 +213,281 @@ jQuery(document).ready(function($) {
         });
         file_frame.open();
     });
+    
+       // Initialize sortable playlists for drag-and-drop functionality
+       $('.playlist').sortable({
+        items: '.playlist-item', // Specify sortable items
+        update: function(event, ui) {
+            var orderedIds = $(this).sortable('toArray', {attribute: 'data-id'});
+            
+            // Send the new order to the server
+            $.post(ajaxurl, {
+                action: 'update_playlist_order',
+                order: orderedIds,
+                playlist_id: $(this).attr('id').replace('playlist-', ''),
+                nonce: my_meme_player_ajax.nonce
+            }, function(response) {
+                if (response.success) {
+                    ConsoleLogger::log('Playlist order updated successfully.');
+                    showFeedback('Playlist order updated successfully.');
+                } else {
+                    ConsoleLogger::error('Failed to update playlist order:', response.data);
+                    showFeedback('Failed to update playlist order.', 'error');
+                }
+            });
+        }
+    });
+
+    // Event listener for 'Add Media' button
+    $('#meme-open-media-library').click(function(e) {
+        e.preventDefault();
+        var file_frame;
+        
+        // If the media frame already exists, reopen it.
+        if (file_frame) {
+            file_frame.open();
+            return;
+        }
+
+        // Create the media frame.
+        file_frame = wp.media.frames.file_frame = wp.media({
+            title: 'Select Media',
+            button: {
+                text: 'Use this media'
+            },
+            multiple: false // Set to true to allow multiple files to be selected
+        });
+
+        // When an image is selected, run a callback.
+        file_frame.on('select', function() {
+            var attachment = file_frame.state().get('selection').first().toJSON();
+            // Assuming you're updating an input field with the media URL
+            $('#meme_media_url').val(attachment.url);
+            // Show feedback message
+            ConsoleLogger::log('Media selected:', attachment.url);
+            showFeedback('Media added to playlist successfully.');
+        });
+
+        // Finally, open the modal
+        file_frame.open();
+    });
+
+    // Function to show feedback messages
+    function showFeedback(message, type = 'success') {
+        var feedbackDiv = $('#meme-playlist-feedback');
+        if (!feedbackDiv.length) {
+            feedbackDiv = $('<div id="meme-playlist-feedback" class="notice is-dismissible"></div>');
+            $('.wrap').prepend(feedbackDiv);
+        }
+        ConsoleLogger::log('Feedback message:', message);
+        feedbackDiv.attr('class', 'notice is-dismissible notice-' + type).text(message).show().delay(5000).fadeOut();
+    }
+
+    var $dropArea = $('#mytech-playlist-drop-area');
+
+    // Drag and drop events
+    $dropArea.on('dragover', function(e) {
+        e.preventDefault();
+        $(this).addClass('is-active');
+    }).on('dragleave', function(e) {
+        e.preventDefault();
+        $(this).removeClass('is-active');
+    }).on('drop', function(e) {
+        e.preventDefault();
+        $(this).removeClass('is-active');
+        var files = e.originalEvent.dataTransfer.files;
+        handleFiles(files);
+    });
+
+    // Handle file selection
+    function handleFiles(files) {
+        var formData = new FormData();
+        formData.append('action', 'mytech_upload_playlist_item');
+        formData.append('nonce', mytechAjax.nonce);
+        formData.append('file', file);
+
+        $.ajax({
+            url: mytechAjax.ajax_url,
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                ConsoleLogger::log('File uploaded successfully.');
+                alert(response.data.message);
+            }
+        });
+    }
+
+    // WordPress media uploader
+    $('#mytech-select-file').on('click', function(e) {
+        e.preventDefault();
+        wp.media.frames.file_frame = wp.media({
+            title: 'Select or Upload Media',
+            button: { text: 'Use this media' },
+            multiple: false
+        });
+
+        wp.media.frames.file_frame.on('select', function() {
+            var attachment = wp.media.frames.file_frame.state().get('selection').first().toJSON();
+            ConsoleLogger::log('Selected: ' + attachment.url);
+            alert('Selected: ' + attachment.url);
+        });
+
+        wp.media.frames.file_frame.open();
+    });
+
+
+    $('#rename_playlist_button').on('click', function() {
+        var playlistId = $('#playlist_id').val(); // Assuming an input field for playlist ID
+        var newName = $('#new_playlist_name').val(); // Assuming an input field for new name
+        var nonce = $('#im_meme_player_rename_playlist_nonce').val(); // Assuming a hidden input field for nonce
+    
+        $.ajax({
+            method: "POST",
+            url: ajaxurl,
+            data: {
+                action: 'im_meme_player_rename_playlist',
+                playlist_id: playlistId,
+                new_title: newName,
+                security: nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    ConsoleLogger::log('Playlist renamed successfully.');
+                    alert('Playlist renamed successfully.');
+                } else {
+                    ConsoleLogger::error('Error: ' + response.data);
+                    alert('Error: ' + response.data);
+                }
+            }
+        });
+    });
+
+    $('#delete_playlist_button').on('click', function() {
+        var playlistId = $('#playlist_id').val(); // Assuming an input field for playlist ID
+        var nonce = $('#im_meme_player_delete_playlist_nonce').val(); // Assuming a hidden input field for nonce
+
+        $.ajax({
+            method: "POST",
+            url: ajaxurl,
+            data: {
+                action: 'im_meme_player_delete_playlist',
+                playlist_id: playlistId,
+                security: nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    ConsoleLogger::log('Playlist deleted successfully.');
+                    alert('Playlist deleted successfully.');
+                } else {
+                    ConsoleLogger::error('Error: ' + response.data);
+                    alert('Error: ' + response.data);
+                }
+            }
+        });
+    });
+
+    $('#create_playlist_button').on('click', function() {
+        var newName = $('#new_playlist_name').val(); // Assuming an input field for new name
+        var nonce = $('#im_meme_player_create_playlist_nonce').val(); // Assuming a hidden input field for nonce
+
+        $.ajax({
+            method: "POST",
+            url: ajaxurl,
+            data: {
+                action: 'im_meme_player_create_playlist',
+                new_title: newName,
+                security: nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    ConsoleLogger::log('Playlist created successfully.');
+                    alert('Playlist created successfully.');
+                } else {
+                    ConsoleLogger::error('Error: ' + response.data);
+                    alert('Error: ' + response.data);
+                }
+            }
+        });
+    });
+
+    $('#add_to_playlist_button').on('click', function() {
+        var playlistId = $('#playlist_id').val(); // Assuming an input field for playlist ID
+        var mediaUrl = $('#meme_media_url').val(); // Assuming an input field for media URL
+        var nonce = $('#im_meme_player_add_to_playlist_nonce').val(); // Assuming a hidden input field for nonce
+
+        $.ajax({
+            method: "POST",
+            url: ajaxurl,
+            data: {
+                action: 'im_meme_player_add_to_playlist',
+                playlist_id: playlistId,
+                media_url: mediaUrl,
+                security: nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    ConsoleLogger::log('Media added to playlist successfully.');
+                    alert('Media added to playlist successfully.');
+                } else {
+                    ConsoleLogger::error('Error: ' + response.data);
+                    alert('Error: ' + response.data);
+                }
+            }
+        });
+    });
+
+    $('#remove_from_playlist_button').on('click', function() {
+        var playlistId = $('#playlist_id').val(); // Assuming an input field for playlist ID
+        var mediaId = $('#media_id').val(); // Assuming an input field for media ID
+        var nonce = $('#im_meme_player_remove_from_playlist_nonce').val(); // Assuming a hidden input field for nonce
+
+        $.ajax({
+            method: "POST",
+            url: ajaxurl,
+            data: {
+                action: 'im_meme_player_remove_from_playlist',
+                playlist_id: playlistId,
+                media_id: mediaId,
+                security: nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    ConsoleLogger::log('Media removed from playlist successfully.');
+                    alert('Media removed from playlist successfully.');
+                } else {
+                    ConsoleLogger::error('Error: ' + response.data);
+                    alert('Error: ' + response.data);
+                }
+            }
+        });
+    });
+
+    $('#update_playlist_button').on('click', function() {
+        var playlistId = $('#playlist_id').val(); // Assuming an input field for playlist ID
+        var newName = $('#new_playlist_name').val(); // Assuming an input field for new name
+        var nonce = $('#im_meme_player_update_playlist_nonce').val(); // Assuming a hidden input field for nonce
+
+        $.ajax({
+            method: "POST",
+            url: ajaxurl,
+            data: {
+                action: 'im_meme_player_update_playlist',
+                playlist_id: playlistId,
+                new_title: newName,
+                security: nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    ConsoleLogger::log('Playlist updated successfully.');
+                    alert('Playlist updated successfully.');
+                } else {
+                    ConsoleLogger::error('Error: ' + response.data);
+                    alert('Error: ' + response.data);
+                }
+            }
+        });
+    });
 });
+    
