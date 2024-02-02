@@ -1,15 +1,16 @@
 <?php
 // Version: 0.0.7.1
 
-
-// Ensure this file is being included within the WordPress framework
-if (!defined('ABSPATH')) {
-    exit;
-}
+// im-meme-player-uninstall.php
 
 // Include the ConsoleLogger class
 use MyTechToday\IMMemePlayer\ConsoleLogger;
 
+// Ensure this file is being included within the WordPress framework
+if (!defined('ABSPATH')) {
+    ConsoleLogger::error('im-meme-player-playlist-helpers.php - ABSPATH constant not defined');
+    exit;
+}
 // If uninstall not called from WordPress, exit
 if (!defined('WP_UNINSTALL_PLUGIN')) {
     exit;

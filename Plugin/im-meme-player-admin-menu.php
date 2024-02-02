@@ -1,14 +1,16 @@
 <?php
 // Version: 0.0.7.1
 
-// Ensure this file is being included within the WordPress framework
-if (!defined('ABSPATH')) {
-    ConsoleLogger::error('im-meme-player-admin-page.php - ABSPATH constant not defined');
-    exit;
-}
+// im-meme-player-admin-menu.php
 
 // Include the ConsoleLogger class
 use MyTechToday\IMMemePlayer\ConsoleLogger;
+
+// Ensure this file is being included within the WordPress framework
+if (!defined('ABSPATH')) {
+    ConsoleLogger::error('im-meme-player-admin-menu.php - ABSPATH constant not defined');
+    exit;
+}
 
 // Function to add a submenu for the playlist manager in the admin dashboard under Tools
 function meme_add_playlist_manager_menu() {

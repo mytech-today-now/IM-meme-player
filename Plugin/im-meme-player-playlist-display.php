@@ -5,6 +5,7 @@
 
 // Ensure this file is being included within the WordPress framework
 if (!defined('ABSPATH')) {
+    ConsoleLogger::error('playlist-display.php - ABSPATH constant not defined');
     exit;
 }
 

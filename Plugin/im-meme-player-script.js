@@ -1,5 +1,8 @@
 /* 
 Version: 0.0.7.1
+
+im-meme-player-script.js
+JavaScript file for the Meme Player plugin.
 */
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -3,7 +3,6 @@
 # Ignore everything in the meme directory
 memes/*
 wp-content/
-plugins/
 
 # But not the meme directory itself
 !memes/.gitkeep

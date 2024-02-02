@@ -1,7 +1,7 @@
 <?php
 // Version: 0.0.7.1
 
-// playlist-helpers.php
+// im-meme-player-playlist-helpers.php
 
 // =====================
 // Playlist CRUD methods
@@ -17,14 +17,14 @@
 // $items = get_playlist_items($playlist_id, 'funny', 'video');
 // Display or process $items as needed
 
+// Include the ConsoleLogger class
+use MyTechToday\IMMemePlayer\ConsoleLogger;
 
 // Ensure this file is being included within the WordPress framework
 if (!defined('ABSPATH')) {
+    ConsoleLogger::error('im-meme-player-playlist-helpers.php - ABSPATH constant not defined');
     exit;
 }
-
-// Include the ConsoleLogger class
-use MyTechToday\IMMemePlayer\ConsoleLogger;
 
 global $wpdb; // Use the global WordPress database object
 

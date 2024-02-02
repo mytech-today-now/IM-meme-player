@@ -1,17 +1,16 @@
 <?php
 // Version: 0.0.7.1
 
-// shortcode.php
-
-
-// Ensure this file is being included within the WordPress framework
-if (!defined('ABSPATH')) {
-    exit;
-}
+// im-meme-player-shortcode.php
 
 // Include the ConsoleLogger class
 use MyTechToday\IMMemePlayer\ConsoleLogger;
 
+// Ensure this file is being included within the WordPress framework
+if (!defined('ABSPATH')) {
+    ConsoleLogger::error('im-meme-player-playlist-helpers.php - ABSPATH constant not defined');
+    exit;
+}
 
 /**
  * Shortcode to display meme player with a specific playlist.

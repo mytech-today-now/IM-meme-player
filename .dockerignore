@@ -1,4 +1,9 @@
 # Version: 0.0.7.1
 
 wp-content/
-plugins/
+builds/
+.dockerignore
+.gitignore
+Dockerfile.dockerfile
+compose-dev.yaml
+

@@ -1,9 +1,14 @@
 <?php
 // Version: 0.0.7.1
 
+// im-meme-player-config.php
+
+// Include the ConsoleLogger class
+use MyTechToday\IMMemePlayer\ConsoleLogger;
+
 // Ensure this file is being included within the WordPress framework
 if (!defined('ABSPATH')) {
-    ConsoleLogger::error('im-meme-player-admin-page.php - ABSPATH constant not defined');
+    ConsoleLogger::error('im-meme-player-config.php - ABSPATH constant not defined');
     exit;
 }
 

@@ -1,15 +1,16 @@
 <?php
 // Version: 0.0.7.1
 
-// playlist-cpt.php
-
-// Ensure this file is being included within the WordPress framework
-if (!defined('ABSPATH')) {
-    exit;
-}
+// im-meme-player-playlist-cpt.php
 
 // Include the ConsoleLogger class
 use MyTechToday\IMMemePlayer\ConsoleLogger;
+
+// Ensure this file is being included within the WordPress framework
+if (!defined('ABSPATH')) {
+    ConsoleLogger::error('im-meme-player-playlist-cpt.php - ABSPATH constant not defined');
+    exit;
+}
 
 /**
  * Registers a custom post type 'playlist'.

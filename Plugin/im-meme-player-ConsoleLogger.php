@@ -1,5 +1,7 @@
 <?php
 
+// im-meme-player-ConsoleLogger.php
+
 namespace MyTechToday\IMMemePlayer;
 
 // Ensure this file is being included within the WordPress framework

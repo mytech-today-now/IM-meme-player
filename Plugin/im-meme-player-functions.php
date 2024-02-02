@@ -1,15 +1,16 @@
 <?php
 // Version: 0.0.7.1
 
-// Ensure this file is being included within the WordPress framework
-if (!defined('ABSPATH')) {
-    ConsoleLogger::error('im-meme-player-admin-page.php - ABSPATH constant not defined');
-    exit;
-}
+// im-meme-player-functions.php
 
 // Include the ConsoleLogger class
 use MyTechToday\IMMemePlayer\ConsoleLogger;
 
+// Ensure this file is being included within the WordPress framework
+if (!defined('ABSPATH')) {
+    ConsoleLogger::error('im-meme-player-functions.php - ABSPATH constant not defined');
+    exit;
+}
 
 // Function to handle the AJAX request for updating playlist order
 function meme_handle_update_playlist_order() {
