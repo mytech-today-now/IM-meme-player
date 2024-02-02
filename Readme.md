@@ -26,7 +26,7 @@ Welcome to IM Meme Player, a cutting-edge WordPress plugin designed to transform
 
 ## Usage Instructions
 
-Embed memes using `[meme_player]` shortcode in posts or pages. Adjust settings in the WordPress admin panel under 'Settings > Meme Player'.
+Embed memes using `[meme_player]` shortcode in posts or pages. Adjust settings in the WordPress admin panel under 'Tools > Meme Player'.
 
 ## System Requirements
 
@@ -35,7 +35,7 @@ Embed memes using `[meme_player]` shortcode in posts or pages. Adjust settings i
 
 ## Getting Started
 
-Configure the plugin under 'Settings > Meme Player' in the WordPress admin area. Then, use the `[meme_player]` shortcode to display the meme player on your site.
+Configure the plugin under 'Tools > Meme Player' in the WordPress dashboard. Then, use the `[meme_player]` shortcode to display the meme player on your site.
 
 ## Support and Community
 
@@ -43,7 +43,7 @@ For support, feature suggestions, or bug reports, visit our [GitHub Issues page]
 
 ## Acknowledgements
 
-Special thanks to the entire community of developers, testers, and users for their invaluable contributions.
+Special thanks to the entire community of developers, AI, testers, and users for their invaluable contributions.
 
 ## Licensing
 
@@ -59,7 +59,8 @@ Follow the latest updates and releases on our [GitHub repository](https://github
 
 ## Version History
 
-- **v.0.0.7.1** (Current): Installation enabled; requires code refinement for optimal functionality.
+- **v.0.0.7.2** (Current): Added debugging statements throughout the repo. Added the ability to add delete and rearrange the order of items in the playlist. Also added the CMV for all of that.   updated more debugging throughout. 
+- **v.0.0.7.1**: Installation enabled; requires code refinement for optimal functionality.
 - **v.0.0.7.0**: Enhanced admin settings interface; minor bug fixes.
 - **v.0.0.6.3**: Improved responsive design for mobile devices.
 - **v.0.0.6.2**: Added nested playback feature.
