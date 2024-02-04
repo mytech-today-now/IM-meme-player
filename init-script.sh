@@ -48,7 +48,7 @@ initialize_wordpress() {
         log_message "WordPress not installed. Installing..."
         if wp core install --url="http://example.com" --title="Example Site" \
            --admin_user="admin" --admin_password="admin_password" \
-           --admin_email="admin@example.com" --allow-root; then
+           --admin_email="mytechtoday@protonmail.com" --allow-root; then
             log_message "WordPress installation successful."
         else
             log_message "WordPress installation failed."
