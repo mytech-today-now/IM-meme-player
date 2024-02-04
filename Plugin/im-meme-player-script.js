@@ -70,91 +70,126 @@ document.addEventListener('DOMContentLoaded', function() {
         return shuffleArray(Object.values(jsonData));
     }
 
-    // Async function to update the display of media files based on filters
-    async function updateMediaDisplay(filters) {
+    /**
+ * Updates the display of media files based on provided filters. This asynchronous function
+ * fetches media files using the specified filters, then displays them sequentially.
+ * 
+ * @param {Object} filters An object containing filter criteria such as tags, categories, and search queries.
+ */
+async function updateMediaDisplay(filters) {
+    try {
+        // Attempt to fetch media files with the provided filters.
         files = await fetchMedia(filters);
+        // Display the fetched files starting from the first item.
         displayFilesSequentially(files, 0);
+    } catch (error) {
+        // Log any errors that occur during fetching or displaying media files.
+        console.error("Error updating media display:", error);
+    }
+}
+
+// Adding event listeners to filter elements for real-time update of media display.
+document.getElementById('tagFilter').addEventListener('change', (event) => {
+    updateMediaDisplay({ tag: event.target.value });
+});
+
+document.getElementById('categoryFilter').addEventListener('change', (event) => {
+    updateMediaDisplay({ category: event.target.value });
+});
+
+document.getElementById('searchForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const query = document.getElementById('searchInput').value;
+    updateMediaDisplay({ search: query });
+});
+
+// Perform an initial fetch and display of media files upon loading.
+fetchMedia().then(fetchedFiles => {
+    files = fetchedFiles;
+    displayFilesSequentially(files, 0);
+}).catch(error => {
+    // Handle and log any network errors that occur during the initial fetch.
+    console.error("Network error on initial fetch:", error);
+});
+
+/**
+ * Displays media files sequentially in the specified HTML element. This function dynamically
+ * creates and appends media elements (images, videos, audios) based on their file extensions.
+ * 
+ * @param {Array} files Array of file URLs to be displayed.
+ * @param {number} index The current index in the files array to display.
+ */
+async function displayFilesSequentially(files, index) {
+    // Ensure the current index is within the bounds of the files array.
+    currentIndex = index % files.length;
+
+    const mediaBoxElement = document.getElementById('mediaBox');
+    if (!mediaBoxElement) {
+        // Exit the function if the required 'mediaBox' element is not found in the DOM.
+        console.error("Required DOM element 'mediaBox' not found.");
+        return;
     }
 
-    // Event listeners for filtering options (tags, categories, search)
-    document.getElementById('tagFilter').addEventListener('change', (event) => {
-        updateMediaDisplay({ tag: event.target.value });
-    });
+    // Clear the media box before displaying new media to avoid duplication.
+    while (mediaBoxElement.firstChild) {
+        mediaBoxElement.firstChild.remove();
+    }
 
-    document.getElementById('categoryFilter').addEventListener('change', (event) => {
-        updateMediaDisplay({ category: event.target.value });
-    });
+    const file = files[currentIndex];
+    const fileExtension = file.split('.').pop().toLowerCase();
 
-    document.getElementById('searchForm').addEventListener('submit', (event) => {
-        event.preventDefault();
-        const query = document.getElementById('searchInput').value;
-        updateMediaDisplay({ search: query });
-    });
+    // Determine the type of media file and create the appropriate HTML element to display it.
+    if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'tif', 'tiff', 'jfif'].includes(fileExtension)) {
+        // Display image files.
+        const img = document.createElement('img');
+        img.src = file;
+        img.style.maxWidth = '100%';
+        img.style.maxHeight = '85vh'; // Max height set to 85% of viewport height for better visibility.
+        img.onerror = () => handleMediaError(img, 'image');
+        img.onload = () => {
+            // Setup a timeout to advance to the next file after a fixed duration.
+            clearTimeout(currentTimeout);
+            currentTimeout = setTimeout(() => {
+                displayFilesSequentially(files, (currentIndex + 1) % files.length);
+            }, IMAGE_DISPLAY_TIME);
+        };
+        mediaBoxElement.appendChild(img);
+    } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
+        // Display video files.
+        const videoElement = document.createElement('video');
+        videoElement.autoplay = true;
+        videoElement.muted = true; // Muted to allow autoplay in most browsers.
+        videoElement.controls = true;
+        videoElement.src = file;
+        videoElement.style.maxHeight = '85vh'; // Consistent max height with images.
+        videoElement.onerror = () => handleMediaError(videoElement, 'video');
+        mediaBoxElement.appendChild(videoElement);
+    } else if (['mp3', 'ogg', 'wav'].includes(fileExtension)) {
+        // Display audio files.
+        const audioElement = document.createElement('audio');
+        audioElement.controls = true; // Display playback controls.
+        audioElement.src = file;
+        audioElement.style.width = '100%'; // Audio controls span the full width of the container.
+        audioElement.onerror = () => handleMediaError(audioElement, 'audio');
+        mediaBoxElement.appendChild(audioElement);
+        console.log(`Audio file loaded: ${file}`);
+    } else {
+        // Log unsupported file types and do not attempt to display them.
+        console.error(`Unsupported file type for ${file}.`);
+    }
+};
 
-    // Initial fetch and display of media files
-    fetchMedia().then(fetchedFiles => {
-        files = fetchedFiles;
-        displayFilesSequentially(files, 0);
-    }).catch(error => {
-        console.error("Network error:", error);
-    });
+/**
+ * Handles errors during the loading of media elements by logging the error and removing the faulty element.
+ * 
+ * @param {HTMLElement} mediaElement The media element that encountered a loading error.
+ * @param {string} type The type of the media ('image', 'video', or 'audio').
+ */
+function handleMediaError(mediaElement, type) {
+    console.error(`Failed to load ${type}:`, mediaElement.src);
+    mediaElement.remove(); // Remove the faulty media element from the DOM.
+}
 
-    // Core function to display media files sequentially
-    async function displayFilesSequentially(files, index) {
-        currentIndex = index;
-
-        const mediaBoxElement = document.getElementById('mediaBox');
-        if (!mediaBoxElement) {
-            console.error("Required DOM element 'mediaBox' not found.");
-            return;
-        }
-
-        // Clear the media box before displaying new media
-        while (mediaBoxElement.firstChild) {
-            mediaBoxElement.firstChild.remove();
-        }
-
-        const file = files[index];
-        const fileExtension = file.split('.').pop().toLowerCase();
-
-        // Conditions to handle different media types (images, videos, and now audio)
-        if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'tif', 'tiff', 'jfif'].includes(fileExtension)) {
-            // Display image files
-            const img = document.createElement('img');
-            img.src = file;
-            img.style.maxWidth = '100%';
-            img.style.maxHeight = '85vh'; // Set max height to 85% of viewport height
-            img.onerror = () => handleMediaError(img, 'image');
-            img.onload = () => {
-                clearTimeout(currentTimeout);
-                currentTimeout = setTimeout(() => {
-                    displayFilesSequentially(files, (index + 1) % files.length);
-                }, IMAGE_DISPLAY_TIME);
-            };
-            mediaBoxElement.appendChild(img);
-        } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
-            // Display video files
-            const videoElement = document.createElement('video');
-            videoElement.autoplay = true;
-            videoElement.muted = true;
-            videoElement.controls = true;
-            videoElement.src = file;
-            videoElement.style.maxHeight = '85vh';
-            videoElement.onerror = () => handleMediaError(videoElement, 'video');
-            mediaBoxElement.appendChild(videoElement);
-            handleVideoPlayback(videoElement, files, index);
-        } else if (['mp3', 'ogg', 'wav'].includes(fileExtension)) {
-            // Display audio files
-            const audioElement = document.createElement('audio');
-            audioElement.controls = true;
-            audioElement.src = file;
-            audioElement.style.width = '100%';
-            audioElement.onerror = () => handleMediaError(audioElement, 'audio');
-            mediaBoxElement.appendChild(audioElement);
-            // Log successful audio loading
-            console.log(`Audio file loaded: ${file}`);
-        }
-    };
 });
 
 
