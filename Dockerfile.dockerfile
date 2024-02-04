@@ -8,15 +8,14 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 # Use the official WordPress image as a parent image
 FROM wordpressdevelop/phpunit
 
-# Install necessary PHP extensions
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-
 # Set the working directory to the WordPress directory
 WORKDIR /var/www/html
 
 # Copy everything except what's in .dockerignore
 COPY /Plugin/. /var/www/html/wp-content/plugins/im-meme-player/
 
+# Install necessary PHP extensions
+RUN docker-php-ext-install mysqli pdo pdo_mysql
 
 # Expose port 80
 EXPOSE 8080
