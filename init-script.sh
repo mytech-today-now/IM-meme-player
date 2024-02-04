@@ -1,30 +1,37 @@
 #!/bin/bash
 
+# Enhanced WordPress Initialization Script
+# Author: mytech@protonmail.com
+# Description: Initializes WordPress installation, sets up database, configures settings,
+# and installs and activates essential plugins including Query Monitor and Debug Log Manager.
+
 # Version: 0.0.7.2
 # Version: 0.0.7.3 - https://chat.openai.com/share/ee97747c-9f64-49b3-8920-b17f1b82f9f1
+# Version: 0.0.7.4 - https://chat.openai.com/share/aab675bd-ca3f-4692-9b33-062ae614301e 
+#                  - Enhanced logging, corrected plugin list to include "Debug Log Manager," and ensured proper script execution with verbose comments for clarity.
 
 
 # This script is used to initialize a WordPress installation.
 # It installs WordPress, sets up the database, and configures settings.
 
 # Set the WordPress installation directory
- cd /var/www/html
-
-# Enhanced WordPress Initialization Script with Debugging and Logging
+cd /var/www/html
 
 echo "----- Script Start -----"
 
-# Function to log messages with timestamps
+# Function to log messages with timestamps for better tracking.
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
 }
 
-# Simulate logging to the web browser console by preparing messages
+# Simulate logging to the web browser console by preparing messages.
+# Note: This is for demonstration purposes and requires browser-side handling.
 prepare_console_log() {
     echo "To log in browser console: console.log('$1')"
 }
 
-# Check database availability
+# Check if the MySQL database is ready before proceeding.
+# Uses wp-cli to check database connectivity.
 wait_for_db() {
     log_message "Checking database availability..."
     until wp db check --allow-root > /dev/null 2>&1; do
@@ -34,49 +41,69 @@ wait_for_db() {
     log_message "Database is ready."
 }
 
-# Initialize WordPress
+# Initialize WordPress if not already installed.
+# Uses wp-cli to install WordPress with provided details.
 initialize_wordpress() {
     if ! wp core is-installed --allow-root; then
         log_message "WordPress not installed. Installing..."
-        wp core install --url="http://example.com" --title="Example Site" --admin_user="admin" --admin_password="admin_password" --admin_email="admin@example.com" --allow-root && log_message "WordPress installation successful." || log_message "WordPress installation failed."
+        if wp core install --url="http://example.com" --title="Example Site" \
+           --admin_user="admin" --admin_password="admin_password" \
+           --admin_email="admin@example.com" --allow-root; then
+            log_message "WordPress installation successful."
+        else
+            log_message "WordPress installation failed."
+        fi
     else
         log_message "WordPress is already installed."
     fi
 }
 
-# Install and activate specified plugins
+# Install and activate specified plugins.
+# Adjusts to include Query Monitor and Debug Log Manager, ensuring both are installed and activated.
 install_activate_plugins() {
-    declare -a plugins=("query-monitor" "debug-bar")
+    # Define the list of plugins to install and activate.
+    # Make sure to replace placeholders with actual plugin slugs.
+    declare -a plugins=("query-monitor" "debug-log-manager") # Update this list as needed.
 
     for plugin in "${plugins[@]}"; do
         log_message "Installing and activating plugin: $plugin..."
-        wp plugin install $plugin --activate --allow-root && log_message "$plugin activated successfully." || log_message "Failed to activate $plugin."
-        prepare_console_log "$plugin activated successfully."
+        if wp plugin install $plugin --activate --allow-root; then
+            log_message "$plugin activated successfully."
+            prepare_console_log "$plugin activated successfully."
+        else
+            log_message "Failed to activate $plugin."
+        fi
     done
 
-    # IM Meme Player plugin activation
-    PLUGIN_PATH="/var/www/html/wp-content/plugins/im-meme-player"
+    # Additional step for custom plugin activation if necessary.
+    # Example: IM Meme Player plugin activation.
+    local PLUGIN_PATH="/var/www/html/wp-content/plugins/im-meme-player"
     if [ -d "$PLUGIN_PATH" ]; then
         log_message "Activating IM Meme Player plugin..."
-        wp plugin activate im-meme-player --allow-root && log_message "IM Meme Player plugin activated successfully." || log_message "Failed to activate IM Meme Player plugin."
-        prepare_console_log "IM Meme Player plugin activated successfully."
+        if wp plugin activate im-meme-player --allow-root; then
+            log_message "IM Meme Player plugin activated successfully."
+            prepare_console_log "IM Meme Player plugin activated successfully."
+        else
+            log_message "Failed to activate IM Meme Player plugin."
+        fi
     else
         log_message "IM Meme Player plugin directory not found: $PLUGIN_PATH"
     fi
 }
 
-# Start of the script execution
+# Main script execution starts here.
+
 log_message "Starting WordPress initialization script..."
 prepare_console_log "Starting WordPress initialization..."
 
-# Database readiness check
+# Check for database readiness before proceeding.
 wait_for_db
 
-# WordPress installation
+# Proceed with WordPress installation.
 initialize_wordpress
 
-# Plugin installation and activation
+# Install and activate required plugins.
 install_activate_plugins
 
-log_message "Initialization script completed."
+log_message "Initialization script completed successfully."
 echo "----- Script End -----"

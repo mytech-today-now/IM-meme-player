@@ -16,7 +16,7 @@ WORKDIR /var/www/html
 EXPOSE 80
 
 # Copy your initialization script
-COPY init-install.sh /usr/local/bin/
+COPY init-script.sh /usr/local/bin/
 
 # Set permissions and execute the script on container start
 RUN chmod +x /usr/local/bin/init-install.sh
