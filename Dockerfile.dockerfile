@@ -1,5 +1,10 @@
 # Version: 0.0.7.3
 
+# Install WP-CLI
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp
+
 # Use the official WordPress image as a parent image
 FROM wordpressdevelop/phpunit
 
@@ -17,11 +22,14 @@ COPY /Plugin/. /var/www/html/wp-content/plugins/im-meme-player/
 EXPOSE 8080
 
 # Copy your initialization script
-COPY init-script.sh /usr/local/bin/
+COPY init-script.sh /usr/local/bin/init-script.sh
 
 # Set permissions and execute the script on container start
-RUN chmod +x /usr/local/bin/init-install.sh
-ENTRYPOINT ["init-install.sh"]
+RUN chmod +x /usr/local/bin/init-script.sh
+ENTRYPOINT ["/usr/local/bin/init-script.sh"]
+
+# Run the initialization script
+CMD ["/usr/local/bin/init-script.sh"]
 
 # Start Apache server in the foreground
 CMD ["apache2-foreground"]
