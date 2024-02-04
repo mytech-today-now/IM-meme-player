@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Version: 0.0.7.1
+# Version: 0.0.7.2
 
 # This script is used to initialize a WordPress installation.
 # It installs WordPress, sets up the database, and configures settings.
