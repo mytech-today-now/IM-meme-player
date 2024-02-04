@@ -31,7 +31,7 @@ services:
     volumes:
       - wordpress:/var/www/html
       - ./wp-content:/var/www/html/wp-content
-      - ./wp-content/plugins/im-meme-player:/var/www/html/wp-content/plugins/im-meme-player
+      - ./wp-content/plugins/im-meme-player:/var/www/html/wp-content/plugins/im-meme-player 
       - ./init-script.sh:/usr/local/bin/init-script.sh
 
   db:
