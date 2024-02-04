@@ -1,5 +1,5 @@
 /* 
-Version: 0.0.7.1
+Version: 0.0.7.2
 
 im-meme-player-script.js
 JavaScript file for the Meme Player plugin.
@@ -7,14 +7,14 @@ JavaScript file for the Meme Player plugin.
 
 document.addEventListener('DOMContentLoaded', function() {
     // Constants
-    const ajaxurl = my_meme_player_ajax.ajax_url; // WordPress AJAX URL for handling AJAX requests
-    const action = 'fetch_meme_files'; // Action hook for AJAX to fetch meme files
-    const IMAGE_DISPLAY_TIME = 5000; // Time in milliseconds to display each image (5 seconds)
-    let currentIndex = 0; // Current index of the displayed file in the files array
-    let files = []; // Array to store file names
-    let currentTimeout; // Current timeout for image display, used to manage timing
+    const ajaxurl = my_meme_player_ajax.ajax_url; // AJAX URL provided by WordPress for handling AJAX requests
+    const action = 'fetch_meme_files'; // Action hook name for AJAX requests to fetch meme files
+    const IMAGE_DISPLAY_TIME = 5000; // Display time for images in milliseconds (5 seconds)
+    let currentIndex = 0; // Current index for navigating through the media files array
+    let files = []; // Array to hold the media files fetched from the server
+    let currentTimeout; // Timeout ID for managing image display intervals
 
-    // Fisher-Yates shuffle algorithm to randomize the order of files
+    // Function to shuffle the media files array for a randomized presentation
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -23,31 +23,31 @@ document.addEventListener('DOMContentLoaded', function() {
         return array;
     }
 
-    // Handle media loading errors
+    // Function to log and handle media loading errors
     function handleMediaError(mediaElement, type) {
         console.error(`Failed to load ${type}:`, mediaElement.src);
-        mediaElement.remove(); // Remove the media element if it fails to load
+        mediaElement.remove(); // Remove the element to avoid displaying broken media
     }
 
-    // Function to handle video playback
+    // Function to handle video playback, ensuring continuous play
     function handleVideoPlayback(videoElement, files, index) {
         videoElement.addEventListener('ended', () => {
-            // When video ends, display the next file
+            // Loop to the next media file upon video end
             displayFilesSequentially(files, (index + 1) % files.length);
         });
     }
 
-    // Navigate through files using the provided step (next or previous)
+    // Function to navigate through media files (next or previous)
     function navigateFiles(step) {
         currentIndex = (currentIndex + step + files.length) % files.length;
         displayFilesSequentially(files, currentIndex);
     }
 
-    // Add event listeners for navigation buttons
+    // Event listeners for navigation buttons
     document.getElementById('prevButton').addEventListener('click', () => navigateFiles(-1));
     document.getElementById('nextButton').addEventListener('click', () => navigateFiles(1));
 
-    // Function to fetch media with optional filters (tags, categories, search query)
+    // Async function to fetch media files from the server with optional filters
     async function fetchMedia(filters = {}) {
         const params = new URLSearchParams({ action, ...filters });
         const response = await fetch(ajaxurl, {
@@ -70,13 +70,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return shuffleArray(Object.values(jsonData));
     }
 
-    // Function to update media display based on filters
+    // Async function to update the display of media files based on filters
     async function updateMediaDisplay(filters) {
         files = await fetchMedia(filters);
         displayFilesSequentially(files, 0);
     }
 
-    // Event listeners for filter options (tags, categories, search)
+    // Event listeners for filtering options (tags, categories, search)
     document.getElementById('tagFilter').addEventListener('change', (event) => {
         updateMediaDisplay({ tag: event.target.value });
     });
@@ -91,27 +91,25 @@ document.addEventListener('DOMContentLoaded', function() {
         updateMediaDisplay({ search: query });
     });
 
-    // Initial fetch and display
+    // Initial fetch and display of media files
     fetchMedia().then(fetchedFiles => {
         files = fetchedFiles;
         displayFilesSequentially(files, 0);
     }).catch(error => {
-        ConsoleLogger::error("Network error:", error);
         console.error("Network error:", error);
     });
 
-    // Display media files sequentially
+    // Core function to display media files sequentially
     async function displayFilesSequentially(files, index) {
         currentIndex = index;
 
         const mediaBoxElement = document.getElementById('mediaBox');
         if (!mediaBoxElement) {
-            ConsoleLogger::error("Required DOM element not found.");
-            console.error("Required DOM element not found.");
+            console.error("Required DOM element 'mediaBox' not found.");
             return;
         }
 
-        // Clear existing media before displaying new media
+        // Clear the media box before displaying new media
         while (mediaBoxElement.firstChild) {
             mediaBoxElement.firstChild.remove();
         }
@@ -119,39 +117,46 @@ document.addEventListener('DOMContentLoaded', function() {
         const file = files[index];
         const fileExtension = file.split('.').pop().toLowerCase();
 
-        // Display image files
+        // Conditions to handle different media types (images, videos, and now audio)
         if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'tif', 'tiff', 'jfif'].includes(fileExtension)) {
+            // Display image files
             const img = document.createElement('img');
             img.src = file;
             img.style.maxWidth = '100%';
             img.style.maxHeight = '85vh'; // Set max height to 85% of viewport height
             img.onerror = () => handleMediaError(img, 'image');
-
-            // On image load, set a timeout to display the next file after a fixed duration
             img.onload = () => {
                 clearTimeout(currentTimeout);
                 currentTimeout = setTimeout(() => {
                     displayFilesSequentially(files, (index + 1) % files.length);
                 }, IMAGE_DISPLAY_TIME);
             };
-
             mediaBoxElement.appendChild(img);
-        } 
-        // Display video files
-        else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
+        } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
+            // Display video files
             const videoElement = document.createElement('video');
             videoElement.autoplay = true;
             videoElement.muted = true;
             videoElement.controls = true;
             videoElement.src = file;
-            videoElement.style.maxHeight = '85vh'; // Set max height for video
+            videoElement.style.maxHeight = '85vh';
             videoElement.onerror = () => handleMediaError(videoElement, 'video');
             mediaBoxElement.appendChild(videoElement);
-
             handleVideoPlayback(videoElement, files, index);
+        } else if (['mp3', 'ogg', 'wav'].includes(fileExtension)) {
+            // Display audio files
+            const audioElement = document.createElement('audio');
+            audioElement.controls = true;
+            audioElement.src = file;
+            audioElement.style.width = '100%';
+            audioElement.onerror = () => handleMediaError(audioElement, 'audio');
+            mediaBoxElement.appendChild(audioElement);
+            // Log successful audio loading
+            console.log(`Audio file loaded: ${file}`);
         }
     };
 });
+
 
 /**
  * Updates the order of playlist items on the server.

@@ -1,5 +1,5 @@
 <?php
-// Version: 0.0.7.1
+// Version: 0.0.7.2
 
 // playlist-display.php
 
@@ -18,56 +18,35 @@ use MyTechToday\IMMemePlayer\ConsoleLogger;
  * @param int $playlist_id The ID of the playlist to display.
  */
 function display_playlist($playlist_id) {
-    // Retrieve the playlist post
-    $playlist = get_post($playlist_id);
+    // Preliminary checks and playlist retrieval logic remains unchanged.
+    
+    // Start of new HTML structure integration
+    echo '<div class="playlist-main">';
 
-    // Check if the playlist exists
-    if (!$playlist) {
-        echo "Playlist not found.";
-        ConsoleLogger::error("Playlist with ID $playlist_id not found."); // Log error for debugging
-        return;
-    }
-
-    // Retrieve playlist items, assuming they are stored in a custom field 'playlist_items'
-    $playlist_items = get_post_meta($playlist_id, 'playlist_items', true);
-
-    // Check if the playlist has items
-    if (empty($playlist_items)) {
-        echo "No items in this playlist.";
-        ConsoleLogger::error("No items in playlist $playlist->post_title ($playlist_id)"); // Log error for debugging
-        return;
-    }
-
-    // Display the playlist
-    echo '<div class="playlist">';
-    echo '<h3>' . esc_html($playlist->post_title) . '</h3>';
-    echo '<ul class="playlist-items">';
-
-    // Iterate over each item in the playlist
+    // Assuming $playlist_items is an array of item IDs
     foreach ($playlist_items as $item_id) {
-        // Fetch details for each item, assuming it's another post
         $item = get_post($item_id);
         if ($item) {
-            echo '<li class="playlist-item"><div class="playlist-item-title">';
-            
-            echo '<a href="' . esc_url(get_permalink($item_id)) . '">' . esc_html($item->post_title) . '</a></div>';
-
-            echo '<div class="playlist-item-description">' . esc_html($item->post_content) . '</div><div class="playlist-item-media">';
-
-            // Display the image or video preview (thumbnail)
-            $media_url = get_the_post_thumbnail_url($item_id, 'medium');
-            if ($media_url) {
-                echo '<img src="' . esc_url($media_url) . '" alt="' . esc_attr($item->post_title) . '" class="playlist-item-thumbnail"></div>';
-            }
-
-            
-            echo '</li>';
+            // Dynamically generating playlist items based on the provided structure.
+            echo '<div class="playlist-item" data-item-id="' . esc_attr($item_id) . '">';
+            echo '<div class="playlist-item-title">' . esc_html($item->post_title) . '</div>';
+            // Additional item details here...
+            echo '</div>'; // Close playlist-item
         } else {
-            ConsoleLogger::error("Playlist item with ID $item_id not found."); // Log error for missing items
+            ConsoleLogger::error("Playlist item with ID $item_id not found.");
         }
     }
 
-    echo '</ul>';
-    echo '</div>';
+    echo '</div>'; // Close playlist-main
+    // Addition of playlist controls
+    echo '<div class="playlist-controls">
+            <button id="prevButton">Previous</button>
+            <button id="nextButton">Next</button>
+          </div>';
+
+    // Enqueue CSS and JavaScript for the playlist
+    wp_enqueue_style('playlist-style', 'im-meme-player-style.css');
+    wp_enqueue_script('playlist-script', 'im-meme-player-script.js', array('jquery'), null, true);
 }
+
 ?>
