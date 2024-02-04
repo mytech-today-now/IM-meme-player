@@ -10,7 +10,7 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql
 WORKDIR /var/www/html
 
 # Copy everything except what's in .dockerignore
-COPY ../Plugins/. /var/www/html/wp-content/plugins/im-meme-player/
+COPY ../Plugin/. /var/www/html/wp-content/plugins/im-meme-player/
 
 # Expose port 80
 EXPOSE 8080
