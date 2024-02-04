@@ -1,4 +1,4 @@
-# Version: 0.0.7.3
+# Version: 0.0.7.4 - add WP-CLI feature
 
 # Install WP-CLI
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
