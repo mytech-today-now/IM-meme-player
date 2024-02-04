@@ -7,13 +7,13 @@ FROM wordpressdevelop/phpunit
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
 # Copy everything except what's in .dockerignore
-COPY . /var/www/html/wp-content/plugins/im-meme-player/Plugin
+COPY . /var/www/html/wp-content/plugins/im-meme-player/
 
 # Set the working directory to the WordPress directory
 WORKDIR /var/www/html
 
 # Expose port 80
-EXPOSE 80
+EXPOSE 8080
 
 # Copy your initialization script
 COPY init-script.sh /usr/local/bin/
