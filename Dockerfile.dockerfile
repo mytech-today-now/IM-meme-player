@@ -12,6 +12,7 @@ WORKDIR /var/www/html
 # Copy everything except what's in .dockerignore
 COPY /Plugin/. /var/www/html/wp-content/plugins/im-meme-player/
 
+
 # Expose port 80
 EXPOSE 8080
 

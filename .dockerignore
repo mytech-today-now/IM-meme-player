@@ -1,4 +1,4 @@
-# Version: 0.0.7.1
+# Version: 0.0.7.3
 
 wp-content/
 builds/
@@ -6,4 +6,6 @@ builds/
 .gitignore
 Dockerfile.dockerfile
 compose-dev.yaml
+init-script.sh
+Readme.md
 
