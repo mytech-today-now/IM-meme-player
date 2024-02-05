@@ -28,7 +28,5 @@ RUN chmod +x /usr/local/bin/init-script.sh
 ENTRYPOINT ["/usr/local/bin/init-script.sh"]
 
 # Run the initialization script
-CMD ["/usr/local/bin/init-script.sh"]
-
 # Start Apache server in the foreground
-CMD ["apache2-foreground"]
+CMD ["/usr/local/bin/init-script.sh", "apache2-foreground"]
