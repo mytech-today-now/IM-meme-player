@@ -19,7 +19,7 @@ version: '0.0.4'
 services:
 
   wordpress:
-    image: wordpress
+    image: wordpress:latest
     restart: always
     ports:
       - 8080:80
@@ -31,8 +31,8 @@ services:
     volumes:
       - wordpress:/var/www/html
       - ./wp-content:/var/www/html/wp-content
-      - ./Plugin/:/var/www/html/wp-content/plugins/im-meme-player 
-      - ./init-script.sh:/usr/local/bin/init-script.sh
+      - ./Plugin:/var/www/html/wp-content/plugins/im-meme-player
+      - ./init-script.sh:/usr/local/bin/init-script.sh # Correctly mounted
 
   db:
     image: mysql:8.0

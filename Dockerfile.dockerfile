@@ -27,6 +27,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 
 # Copying the custom WordPress plugin from the Plugin directory to the appropriate location in the container
 # Excludes files specified in .dockerignore to minimize the image size and secure the build environment
+chmod -R 777 ./Plugin
 COPY /Plugin/. /var/www/html/wp-content/plugins/im-meme-player/
 
 # Installing the necessary PHP extensions for WordPress to function correctly
