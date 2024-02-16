@@ -23,11 +23,9 @@ function meme_set_default_allowed_origins() {
     }
 }
 
-// Register the above function to run on plugin activation
-register_activation_hook(__FILE__, 'meme_set_default_allowed_origins');
-ConsoleLogger::log('Default allowed origins set.');
-
 // Including other PHP files
+include_once plugin_dir_path(__FILE__) . 'im-meme-player-ConsoleLogger.php';
+ConsoleLogger::log('im-meme-player-admin-menu.php file included.');
 include_once plugin_dir_path(__FILE__) . 'im-meme-player-admin-menu.php';
 ConsoleLogger::log('im-meme-player-admin-menu.php file included.');
 include_once plugin_dir_path(__FILE__) . 'im-meme-player-admin-page.php';
@@ -48,6 +46,10 @@ include_once plugin_dir_path(__FILE__) . 'im-meme-player-shortcode.php';
 ConsoleLogger::log('im-meme-player-shortcode.php file included.');
 include_once plugin_dir_path(__FILE__) . 'im-meme-player-uninstall.php';
 ConsoleLogger::log('im-meme-player-uninstall.php file included.');
+
+// Register the above function to run on plugin activation
+register_activation_hook(__FILE__, 'meme_set_default_allowed_origins');
+ConsoleLogger::log('Default allowed origins set.');
 
 // Handle CORS via function
 ConsoleLogger::log('Handling CORS...');

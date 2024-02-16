@@ -16,7 +16,7 @@
 FROM wordpressdevelop/phpunit
 
 # Setting the working directory to the WordPress root directory
-WORKDIR /var/www/html
+WORKDIR /var/www/html/
 
 # Installing WP-CLI for command-line WordPress management
 # Ensures that the downloaded WP-CLI Phar is executable and moves it to a global location for easy access
@@ -28,7 +28,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 # Copying the custom WordPress plugin from the Plugin directory to the appropriate location in the container
 # Excludes files specified in .dockerignore to minimize the image size and secure the build environment
 chmod -R 777 ./Plugin
-COPY /Plugin/. /var/www/html/wp-content/plugins/im-meme-player/
+COPY ./Plugin/. /var/www/html/wp-content/plugins/im-meme-player/
 
 # Installing the necessary PHP extensions for WordPress to function correctly
 # mysqli for MySQL database support, pdo and pdo_mysql for PHP Data Objects to abstract database access
