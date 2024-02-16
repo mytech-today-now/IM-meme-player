@@ -28,7 +28,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 # Copying the custom WordPress plugin from the Plugin directory to the appropriate location in the container
 # Excludes files specified in .dockerignore to minimize the image size and secure the build environment
 chmod -R 777 ./Plugin
-COPY ./Plugin/. /var/www/html/wp-content/plugins/im-meme-player/
+COPY /g/Insidious_Meme/2023-09-29_MemePlayer_v_2/IM-meme-player/IM-meme-player/IM-meme-player/IM-meme-player/Plugin/ /var/www/html/wp-content/plugins/im-meme-player/
 
 # Installing the necessary PHP extensions for WordPress to function correctly
 # mysqli for MySQL database support, pdo and pdo_mysql for PHP Data Objects to abstract database access
@@ -42,7 +42,7 @@ EXPOSE 8080
 # Copying an initialization script to configure the WordPress environment and start Apache
 # Ensures that the script is executable and will run as the container starts
 # Copying the initialization script to the container's /usr/local/bin directory for easy access
-COPY ./init-script.sh /usr/local/bin/init-script.sh  
+COPY /g/Insidious_Meme/2023-09-29_MemePlayer_v_2/IM-meme-player/IM-meme-player/IM-meme-player/IM-meme-player/init-script.sh /usr/local/bin/init-script.sh  
 RUN chmod +x /usr/local/bin/init-script.sh \
     && echo "Initialization script copied and set as executable."
 
