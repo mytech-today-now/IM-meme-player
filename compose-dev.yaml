@@ -1,5 +1,5 @@
-# Version: 0.0.7.1
-# Date: 2023-01-07
+# Version: 0.0.7.3
+# Date: 2023-02-16
 # Author: mytechtoday@protonmail.com
 # Description: Docker Compose file for local development
 # Usage: docker-compose -f compose-dev.yaml up -d
@@ -19,7 +19,7 @@ version: '0.0.4'
 services:
 
   wordpress:
-    image: wordpress:latest
+    image: wordpressdevelop/phpunit:latest
     restart: always
     ports:
       - 8080:80
