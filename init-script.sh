@@ -9,7 +9,7 @@
 # Version: 0.0.7.3 - https://chat.openai.com/share/ee97747c-9f64-49b3-8920-b17f1b82f9f1
 # Version: 0.0.7.4 - https://chat.openai.com/share/aab675bd-ca3f-4692-9b33-062ae614301e 
 #                  - Enhanced logging, corrected plugin list to include "Debug Log Manager," and ensured proper script execution with verbose comments for clarity.
-
+# Version: 0.0.7.5 - https://chat.openai.com/share/2ec1197a-a8dc-4e3a-8ea0-2cdfba49485e
 
 # This script is used to initialize a WordPress installation.
 # It installs WordPress, sets up the database, and configures settings.
