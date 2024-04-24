@@ -26,11 +26,11 @@ Welcome to IM Meme Player, a cutting-edge WordPress plugin designed to transform
 
 ## Usage Instructions
 
-The meme playlist is a new custom post type.  Each item in the playlist can consist of media type of some sort, such as MP4,  MP3,  jpeg, jpg,  PNG,  Ico,  SVG,  jfif,  or Ogg.  When viewing the playlist,  the playlist advances through images based of of a setting in the configuration page.   If the item is video, it will automatically play the video.   Upon completion of the video the playlist will move to the next item.
+The meme playlist is a new custom post type.  Each item in the playlist can consist of a media type of some sort, such as MP4,  MP3,  jpeg, jpg,  PNG,  Ico,  SVG,  jfif,  or ogg.  When viewing the playlist,  the playlist advances through images based on a setting on the configuration page.   If the item is video, it will automatically play the video.   Upon completion of the video, the playlist will move to the next item.
 
-The user is able to advance forward in the playlist or backward in the playlist, using GUI controls.
+The user can advance in the playlist or backward in the playlist, using GUI controls.
 
-The playlist is able to alter playlist playback, and edit playlists on the configuration page.
+The playlist can alter playlist playback and edit playlists on the configuration page.
 
 Embed memes using `[meme_player]` shortcode in posts or pages. Adjust settings in the WordPress admin panel under 'Tools > Meme Player'.
 
