@@ -66,18 +66,16 @@ Follow the latest updates and releases on our [GitHub repository](https://github
 ## Version History
 - **v.0.0.7.3** (Current): 
   - Implemented error handling and exception tracking for better debugging.
-  - Introduced new feature for sharing memes on social media platforms.
-  - Optimized code for faster meme loading and playback.
   - Fixed minor bugs reported in the previous version.
   - Enhanced user interface for a more intuitive user experience.
   - Added support for more meme formats.
   - Improved security measures to protect user data.
-  - Begin creating builds of the plugin as a .zip file in the [builds](https://github.com/mytech-today-now/IM-meme-player/tree/main/builds) folder, with new naming convension.
+  - Begin creating builds of the plugin as a .zip file in the [builds](https://github.com/mytech-today-now/IM-meme-player/tree/main/builds) folder, with new naming convention.
   - Clarified plug-in usage in the readme file.
 - **v.0.0.7.2**: 
   - Added debugging statements throughout the repo.
   - Added the ability to add delete and rearrange the order of items in the playlist. 
-  - Also added the CMV for all of that.
+  - Added the CMV for all of that.
   - updated more debugging throughout.
 - **v.0.0.7.1**: Installation enabled; requires code refinement for optimal functionality.
 - **v.0.0.7.0**: Enhanced admin settings interface; minor bug fixes.
