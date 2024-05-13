@@ -1,0 +1,199 @@
+openapi: 3.0.0
+info:
+  title: WordPress Custom Playlist API
+  description: API to manage custom playlists consisting of videos, audios, images, and other HTML compatible technologies on a WordPress site. Integrates WordPress authentication for security.
+  version: 1.0.0
+servers:
+  - url: https://your-wordpress-site.com/api
+    description: Main production server
+
+security:
+  - OAuth2: [read, write]
+
+paths:
+  /playlists:
+    get:
+      operationId: listPlaylists
+      summary: Lists all playlists.
+      security:
+        - OAuth2: [read]
+      responses:
+        '200':
+          description: A list of all playlists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Playlist'
+    post:
+      operationId: createPlaylist
+      summary: Creates a new playlist.
+      security:
+        - OAuth2: [write]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Playlist'
+      responses:
+        '201':
+          description: Playlist created
+
+  /playlists/{playlistId}:
+    get:
+      operationId: getPlaylist
+      summary: Gets a playlist by ID.
+      security:
+        - OAuth2: [read]
+      parameters:
+        - name: playlistId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detailed information of a playlist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+    put:
+      operationId: updatePlaylist
+      summary: Updates a playlist.
+      security:
+        - OAuth2: [write]
+      parameters:
+        - name: playlistId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Playlist'
+      responses:
+        '200':
+          description: Playlist updated
+    delete:
+      operationId: deletePlaylist
+      summary: Deletes a playlist.
+      security:
+        - OAuth2: [write]
+      parameters:
+        - name: playlistId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Playlist deleted
+
+  /playlists/{playlistId}/items:
+    get:
+      operationId: listPlaylistItems
+      summary: Lists all items in a specific playlist.
+      security:
+        - OAuth2: [read]
+      parameters:
+        - name: playlistId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of items in the playlist
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlaylistItem'
+    post:
+      operationId: addItemToPlaylist
+      summary: Adds an item to a playlist.
+      security:
+        - OAuth2: [write]
+      parameters:
+        - name: playlistId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaylistItem'
+      responses:
+        '201':
+          description: Item added to the playlist
+
+  /playlists/{playlistId}/items/{itemId}:
+    delete:
+      operationId: deletePlaylistItem
+      summary: Deletes an item from a playlist.
+      security:
+        - OAuth2: [write]
+      parameters:
+        - name: playlistId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Item deleted from the playlist
+
+components:
+  schemas:
+    Playlist:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaylistItem'
+
+    PlaylistItem:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string  # e.g., video, audio, image, form
+        url:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+
+securitySchemes:
+  OAuth2:
+    type: oauth2
+    flows:
+      authorizationCode:
+        authorizationUrl: https://your-wordpress-site.com/oauth/authorize
+        tokenUrl: https://your-wordpress-site.com/oauth/token
+        scopes:
+          read: Grants read access
+          write: Grants write access
