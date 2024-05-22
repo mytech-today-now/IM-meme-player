@@ -42,7 +42,7 @@ EXPOSE 8080
 # Copying an initialization script to configure the WordPress environment and start Apache
 # Ensures that the script is executable and will run as the container starts
 # Copying the initialization script to the container's /usr/local/bin directory for easy access
-COPY /g/Insidious_Meme/2023-09-29_MemePlayer_v_2/IM-meme-player/IM-meme-player/IM-meme-player/IM-meme-player/init-script.sh /usr/local/bin/init-script.sh  
+COPY /init-script.sh /usr/local/bin/init-script.sh  
 RUN chmod +x /usr/local/bin/init-script.sh \
     && echo "Initialization script copied and set as executable."
 
